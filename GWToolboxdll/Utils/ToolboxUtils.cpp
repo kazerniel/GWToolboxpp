@@ -1125,6 +1125,7 @@ namespace ToolboxUtils {
 
     std::wstring ShorthandItemDescription(GW::Item* item)
     {
+        if (!(item && item->info_string && *item->info_string)) return L"";
         std::wstring original(item->info_string);
         wchar_t buffer[128];
 

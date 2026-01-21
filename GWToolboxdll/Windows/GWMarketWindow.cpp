@@ -4,10 +4,16 @@
 
 #include <GWCA/Constants/Constants.h>
 
-#include <GWCA/Managers/SkillbarMgr.h>
-#include <GWCA/Managers/GameThreadMgr.h>
-#include <GWCA/Managers/UIMgr.h>
 #include <GWCA/GameEntities/Attribute.h>
+#include <GWCA/GameEntities/Item.h>
+#include <GWCA/GameEntities/Map.h>
+
+#include <GWCA/Managers/GameThreadMgr.h>
+#include <GWCA/Managers/SkillbarMgr.h>
+#include <GWCA/Managers/UIMgr.h>
+#include <GWCA/Managers/PlayerMgr.h>
+#include <GWCA/Managers/ItemMgr.h>
+#include <GWCA/Managers/MapMgr.h>
 
 #include <Logger.h>
 #include <Utils/GuiUtils.h>
@@ -16,9 +22,14 @@
 #include <easywsclient.hpp>
 #include <nlohmann/json.hpp>
 
+
 #include <Modules/GwDatTextureModule.h>
 #include <Modules/Resources.h>
+#include <Modules/InventoryManager.h>
+
+#include <Timer.h>
 #include <Utils/TextUtils.h>
+#include <Utils/ToolboxUtils.h>
 #include <algorithm>
 #include <chrono>
 #include <iomanip>
@@ -26,7 +37,7 @@
 #include <sstream>
 #include <thread>
 #include <unordered_set>
-
+#include <GWCA/Context/CharContext.h>
 
 namespace {
     using easywsclient::WebSocket;
@@ -34,13 +45,17 @@ namespace {
 
     const char* market_host = "v2.gwmarket.net";
     const char* market_name = "GWMarket.net";
+    std::string market_uuid = "";
+
+
+    clock_t last_shop_refresh_sent = 0;
 
     // Connection rate limiting
     constexpr uint32_t COST_PER_CONNECTION_MS = 30 * 1000;
     constexpr uint32_t COST_PER_CONNECTION_MAX_MS = 60 * 1000;
 
     // Enums for type-safe representations
-    enum class Currency : uint8_t { Platinum = 0, Ecto = 1, Zkeys = 2, Arms = 3, Count = 4, All = 0xf };
+    enum class Currency : uint32_t { Platinum = 0, Ecto = 1, Zkeys = 2, Arms = 3, Count = 4, All = 0xf };
 
     enum class OrderType : uint8_t { Sell = 0, Buy = 1 };
 
@@ -48,7 +63,8 @@ namespace {
     Currency order_view_currency = Currency::All;
 
     // Safe string extraction helper
-    std::string parseStringFromJson(const json& j, const char* key, const std::string& default_val) {
+    std::string parseStringFromJson(const json& j, const char* key, const std::string& default_val)
+    {
         if (!j.is_discarded() && j.contains(key) && j[key].is_string()) {
             return j[key].get<std::string>();
         }
@@ -78,10 +94,8 @@ namespace {
     float parseFloatFromJson(const json& j, const char* key, const float& default_val)
     {
         if (!j.is_discarded() && j.contains(key)) {
-            if (j[key].is_number_float())
-                return j[key].get<float>();
-            if(j[key].is_number_integer()) 
-                return (float)j[key].get<int>();
+            if (j[key].is_number_float()) return j[key].get<float>();
+            if (j[key].is_number_integer()) return (float)j[key].get<int>();
         }
         return default_val;
     };
@@ -138,6 +152,15 @@ namespace {
         return &(*it.first);
     }
 
+
+    std::string* GetAttributeName(GW::Constants::Attribute attribute)
+    {
+        const auto attrib_data = GW::SkillbarMgr::GetAttributeConstantData(attribute);
+        if (attrib_data) {
+            return &Resources::DecodeStringId(attrib_data->name_id, GW::Constants::Language::English)->string();
+        }
+        return nullptr;
+    }
 
     GW::Constants::Attribute AttributeFromString(const std::string& str)
     {
@@ -209,18 +232,30 @@ namespace {
 
     // Data structures
     struct Price {
-        Currency type;
-        int quantity;
-        float price;
+        Currency type = Currency::Platinum;
+        int quantity = 1;
+        float price = 5.f;
 
         static Price FromJson(const json& j)
         {
             Price p;
             p.type = static_cast<Currency>(parseIntFromJson(j, "type", 0));
             p.quantity = parseIntFromJson(j, "quantity", 0);
+            p.quantity = parseIntFromJson(j, "unit", p.quantity);
             p.price = parseFloatFromJson(j, "price", 0.f);
             return p;
         }
+        json ToJson() const
+        {
+            json j;
+            if (!valid()) return j;
+            j["type"] = static_cast<int>(type);
+            j["quantity"] = quantity;
+            j["unit"] = quantity;
+            j["price"] = price;
+            return j;
+        }
+        bool valid() const { return quantity && price; }
     };
     struct WeaponDetails {
         // "weaponDetails":{"attribute":"Tactics","requirement":9,"inscription":true,"oldschool":false,"core":null,"prefix":null,"suffix":null},
@@ -231,12 +266,16 @@ namespace {
         {
             WeaponDetails p;
             p.attribute = AttributeFromString(parseStringFromJson(j, "attribute", ""));
+
+
+
             p.requirement = parseIntFromJson(j, "requirement", 0) & 0xf;
             p.inscribable = parseBoolFromJson(j, "inscription", false);
             return p;
         }
 
-        std::string toString() const {
+        std::string toString() const
+        {
             std::string out;
             const auto attrib_data = GW::SkillbarMgr::GetAttributeConstantData(attribute);
             if (attrib_data) {
@@ -248,7 +287,16 @@ namespace {
             }
             return out;
         }
-
+        bool valid() const { return GetAttributeName(attribute) != nullptr; }
+        json ToJson() const
+        {
+            if (!valid()) return {};
+            json j;
+            j["attribute"] = *GetAttributeName(attribute);
+            j["requirement"] = requirement;
+            j["inscription"] = inscribable;
+            return j;
+        }
     };
 
     struct MarketItem {
@@ -260,9 +308,10 @@ namespace {
         time_t lastRefresh = 0;
         WeaponDetails weaponDetails;
         std::string description;
-
         float price_per() const { return prices.empty() ? 0.f : prices[0].price / quantity; }
         Currency currency() const { return prices.empty() ? Currency::All : prices[0].type; }
+
+        bool valid() const { return !prices.empty() && lastRefresh && !name.empty(); }
 
         static MarketItem FromJson(const json& j)
         {
@@ -284,14 +333,125 @@ namespace {
 
             if (j.contains("prices") && j["prices"].is_array()) {
                 for (const auto& price_json : j["prices"]) {
-                    item.prices.push_back(Price::FromJson(price_json));
+                    auto p = Price::FromJson(price_json);
+                    if (p.valid()) item.prices.push_back(p);
                 }
             }
 
             return item;
         }
-        bool has_weapon_details() const { return weaponDetails.attribute != GW::Constants::Attribute::None;}
+        json ToJson()
+        {
+            json j;
+            if (!valid()) return j;
+            j["name"] = name;
+            j["player"] = player;
+            j["description"] = description;
+            j["orderType"] = static_cast<int>(orderType);
+            j["quantity"] = quantity;
+            j["lastRefresh"] = static_cast<uint64_t>(lastRefresh) * 1000; // Convert to milliseconds
+
+            if (has_weapon_details()) {
+                j["weaponDetails"] = weaponDetails.ToJson();
+            }
+
+            j["prices"] = json::array();
+            for (const auto& price : prices) {
+                j["prices"].push_back(price.ToJson());
+            }
+
+            return j;
+        }
+
+        bool has_weapon_details() const { return weaponDetails.attribute != GW::Constants::Attribute::None; }
     };
+
+    struct ShopItem : MarketItem {
+        bool hidden = false;
+        bool dedicated = false;
+        bool pre = false;
+        ShopItem() {}
+        ShopItem(const MarketItem& item) : MarketItem(item) {}
+        json ToJson()
+        {
+            json j = MarketItem::ToJson();
+            return j;
+        }
+        static ShopItem FromJson(const json& j)
+        {
+            ShopItem item = MarketItem::FromJson(j);
+            if (j.contains("orderDetails") && j["orderDetails"].is_object()) {
+                const auto& od = j["orderDetails"];
+                item.dedicated = parseBoolFromJson(od, "dedicated", false);
+                item.pre = parseBoolFromJson(od, "pre", false);
+            }
+            return item;
+        }
+    };
+
+    struct MarketShop {
+        std::string player;
+        std::string uuid;
+        std::vector<ShopItem> items;
+        std::vector<std::string> certified;
+        time_t lastRefresh = 0;
+
+        bool is_certified(const std::string& player) { 
+            return std::ranges::find(certified.begin(), certified.end(), player) != certified.end();
+        }
+
+        static MarketShop FromJson(const json& j)
+        {
+            MarketShop shop;
+            if (j.is_discarded()) return shop;
+
+            shop.player = parseStringFromJson(j, "player", "");
+            shop.uuid = parseStringFromJson(j, "uuid", "");
+
+            uint64_t lastRefresh_ms = parseUint64FromJson(j, "lastRefresh", 0ULL);
+            shop.lastRefresh = lastRefresh_ms ? lastRefresh_ms / 1000 : 0;
+
+            if (j.contains("items") && j["items"].is_array()) {
+                for (const auto& item_json : j["items"]) {
+                    auto item = ShopItem::FromJson(item_json);
+                    if (item.valid()) {
+                        shop.items.push_back(item);
+                    }
+                }
+            }
+            if (j.contains("certified") && j["certified"].is_array()) {
+                for (const auto& player_name : j["certified"]) {
+                    if (player_name.is_string()) shop.certified.push_back(player_name.get<std::string>());
+                }
+            }
+
+            return shop;
+        }
+
+        json ToJson()
+        {
+            json j;
+            if (!valid()) return j;
+            j["player"] = player;
+            j["uuid"] = uuid;
+            j["lastRefresh"] = (uint64_t)(lastRefresh * 1000);
+            j["authCertified"] = certified.size() > 0;
+            std::vector<json> certified_json;
+            for (auto& player_name : certified) {
+                certified_json.push_back(player_name);
+            }
+            j["certified"] = certified_json;
+            j["daybreakOnline"] = true;
+            std::vector<json> items_json;
+            for (auto& item : items) {
+                items_json.push_back(item.ToJson());
+            }
+            j["items"] = items_json;
+            return j;
+        }
+        bool valid() const { return !player.empty() && !uuid.empty(); }
+    };
+    MarketShop my_shop;
 
     struct AvailableItem {
         const std::string* name;
@@ -355,6 +515,22 @@ namespace {
     void DrawFavoritesList();
     void DrawItemDetails();
     void Refresh();
+    void OnShopCertificationSecret(const json& data);
+    void OnShopRefreshed(const json& data);
+    void SendCloseShop(const MarketShop& shop);
+
+    std::string GetCurrentPlayerName() {
+        auto c = GW::GetCharContext();
+        if (c && c->player_name && *c->player_name) 
+            return TextUtils::WStringToString(c->player_name);
+        return "";
+    }
+
+
+    bool IsSocketIOReady()
+    {
+        return ws && ws->getReadyState() == WebSocket::OPEN && socket_io_ready;
+    }
 
     std::string EncodeSocketIOMessage(const std::string& event, const std::string& data = "")
     {
@@ -437,6 +613,25 @@ namespace {
         Log::Log("Received %zu orders", current_item_orders.size());
     }
 
+    void OnShopRefreshed(const json& data)
+    {
+        // 42["RefreshShop",{"uuid":"QPDJQNxJTv","player":"Evangelica Levious","items":[],"daybreakOnline":false,"lastIP":"90.206.155.249","lastRefresh":1768865886040}]
+        // 42["refreshShop",{"player":"Evangelica Levious","items":[{"name":"Spear Grip of
+        // Fortitude","orderType":0,"hidden":false,"prices":[{"type":0,"price":12,"unit":12}],"quantity":1,"description":"","orderDetails":{"dedicated":false,"pre":false}}],"uuid":"QPDJQNxJTv","daybreakOnline":false}]
+        auto shop = MarketShop::FromJson(data);
+        if (my_shop.uuid != shop.uuid) {
+            SendCloseShop(my_shop);
+        }
+        my_shop = shop;
+    }
+    void OnShopError(const json& data)
+    {
+        if (data.is_string()) {
+            const auto warning = std::format("[Market] {}", data.get<std::string>());
+            Log::Warning("%s", warning.c_str());
+        }
+    }
+
     void HandleSocketIOHandshake(const std::string& message)
     {
         if (message[0] != '0') return;
@@ -509,6 +704,12 @@ namespace {
                             OnGetLastItems(data);
                         else if (event == "GetItemOrders")
                             OnGetItemOrders(data);
+                        else if (event == "ShopCertificationSecret")
+                            OnShopCertificationSecret(data);
+                        else if (event == "RefreshShop")
+                            OnShopRefreshed(data);
+                        else if (event == "ToasterError")
+                            OnShopError(data);
                     }
                 }
                 break;
@@ -517,38 +718,55 @@ namespace {
 
     void SendSocketStarted()
     {
-        if (ws && ws->getReadyState() == WebSocket::OPEN && socket_io_ready) {
-            std::string msg = EncodeSocketIOMessage("SocketStarted");
-            ws->send(msg);
-            Log::Log("[SEND] %s", msg.c_str());
-        }
+        if (!IsSocketIOReady()) return;
+        std::string msg = EncodeSocketIOMessage("SocketStarted");
+        ws->send(msg);
+        Log::Log("[SEND] %s", msg.c_str());
     }
 
     void SendGetAvailableOrders()
     {
-        if (ws && ws->getReadyState() == WebSocket::OPEN && socket_io_ready) {
-            std::string msg = EncodeSocketIOMessage("getAvailableOrders");
-            ws->send(msg);
-            Log::Log("[SEND] %s", msg.c_str());
-        }
+        if (!IsSocketIOReady()) return;
+        std::string msg = EncodeSocketIOMessage("getAvailableOrders");
+        ws->send(msg);
+        Log::Log("[SEND] %s", msg.c_str());
     }
 
     void SendGetLastItemsByFamily(const std::string& family)
     {
-        if (ws && ws->getReadyState() == WebSocket::OPEN && socket_io_ready) {
-            std::string msg = EncodeSocketIOMessage("getLastItemsByFamily", family);
-            ws->send(msg);
-            Log::Log("[SEND] %s", msg.c_str());
+        if (!IsSocketIOReady()) return;
+        std::string msg = EncodeSocketIOMessage("getLastItemsByFamily", family);
+        ws->send(msg);
+        Log::Log("[SEND] %s", msg.c_str());
+    }
+
+    void SendAskForCertification()
+    {
+        if (!IsSocketIOReady()) return;
+        std::string msg = EncodeSocketIOMessage("askPlayerCertification", my_shop.uuid);
+        ws->send(msg);
+        Log::Log("[SEND] %s", msg.c_str());
+    }
+    void OnShopCertificationSecret(const json& data)
+    {
+        const auto secret = parseStringFromJson(data, "secret", "");
+        const auto uuid = parseStringFromJson(data, "uuid", "");
+        if (secret.empty() || uuid.empty()) {
+            Log::Warning("OnShopCertificationSecret: uuid or secret empty!");
+            return;
         }
+        const auto msg = TextUtils::StringToWString(std::format("{}|{}", uuid, secret));
+        GW::GameThread::Enqueue([cpy = msg]() {
+            GW::Chat::SendChat(L"Gwmarket Auth", cpy.c_str());
+        });
     }
 
     void SendGetItemOrders(const std::string& item_name)
     {
-        if (ws && ws->getReadyState() == WebSocket::OPEN && socket_io_ready) {
-            std::string msg = EncodeSocketIOMessage("getItemOrders", item_name);
-            ws->send(msg);
-            Log::Log("[SEND] %s", msg.c_str());
-        }
+        if (!IsSocketIOReady()) return;
+        std::string msg = EncodeSocketIOMessage("getItemOrders", item_name);
+        ws->send(msg);
+        Log::Log("[SEND] %s", msg.c_str());
     }
 
     void SendPing()
@@ -558,6 +776,27 @@ namespace {
             last_ping_time = clock();
             Log::Log("[SEND] 2");
         }
+    }
+
+    void SendRefreshShop(bool force = false)
+    {
+        if (!IsSocketIOReady()) return;
+        if (!force && TIMER_DIFF(last_shop_refresh_sent) < 300 * 1000) return;
+        if (!my_shop.valid()) return;
+        last_shop_refresh_sent = TIMER_INIT();
+        json data = my_shop.ToJson();
+
+        std::string msg = EncodeSocketIOMessage("refreshShop", data);
+        ws->send(msg);
+
+        Log::Log("[SEND] %s", msg.c_str());
+    }
+    void SendCloseShop(const MarketShop& shop)
+    {
+        if (!IsSocketIOReady() || shop.uuid.empty()) return;
+        std::string msg = EncodeSocketIOMessage("closeShop", shop.uuid);
+        ws->send(msg);
+        Log::Log("[SEND] %s", msg.c_str());
     }
 
     void DeleteWebSocket(WebSocket* socket)
@@ -698,7 +937,8 @@ namespace {
             ImGui::PopID();
         }
     }
-    void ToggleFavourite(const std::string& item_name, bool is_favorite) {
+    void ToggleFavourite(const std::string& item_name, bool is_favorite)
+    {
         if (item_name.empty()) return;
         if (!is_favorite) {
             favorite_items.erase(item_name);
@@ -761,7 +1001,7 @@ namespace {
                 ToggleFavourite(current_viewing_item, !is_favorite);
             }
             ImGui::SameLine();
-            std::string url = std::format("https://{}/item/{}", market_host, TextUtils::UrlEncode(current_viewing_item,' '));
+            std::string url = std::format("https://{}/item/{}", market_host, TextUtils::UrlEncode(current_viewing_item, ' '));
             auto btn_label = std::format("{} {}", ICON_FA_GLOBE, market_name);
             if (ImGui::Button(btn_label.c_str())) {
                 GW::GameThread::Enqueue([url]() {
@@ -859,16 +1099,16 @@ namespace {
         ImGui::Separator();
 
         for (const auto& order : current_item_orders) {
-            if (!(order.orderType == OrderType::Sell && order.quantity && !order.prices.empty())) continue;
-            DrawOrder(order);
+            if (order.orderType == OrderType::Sell && order.valid()) 
+                DrawOrder(order);
         }
 
         ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "BUY ORDERS:");
         ImGui::Separator();
 
         for (const auto& order : current_item_orders) {
-            if (!(order.orderType == OrderType::Buy && order.quantity && !order.prices.empty())) continue;
-            DrawOrder(order);
+            if (order.orderType == OrderType::Buy && order.valid())
+                DrawOrder(order);
         }
     }
 
@@ -876,17 +1116,241 @@ namespace {
     {
         if (!socket_io_ready) return;
         SendGetAvailableOrders();
-        // SendGetLastItemsByFamily("all");
     }
 
     bool collapsed = false;
-    bool ShouldConnect() {
+    bool show_my_shop_window = false;
+    bool show_edit_item_window = false;
+    size_t editing_item_index = 0;
+
+    // Temporary values for editing shop items
+    struct EditingShopItem {
+        char name_buffer[256] = {0};
+        char description_buffer[512] = {0};
+        ShopItem item;
+        Price price;
+        
+
+        void Reset()
+        {
+            memset(name_buffer, 0, sizeof(name_buffer));
+            memset(description_buffer, 0, sizeof(description_buffer));
+            item = {};
+            price = {};
+        }
+
+        void LoadFrom(const ShopItem& _item)
+        {
+            item = _item;
+            price = {};
+            if (item.prices.size()) {
+                price = item.prices[0];
+            }
+
+            strncpy(name_buffer, item.name.c_str(), sizeof(name_buffer) - 1);
+            if (!item.description.empty()) {
+                strncpy(description_buffer, item.description.c_str(), sizeof(description_buffer) - 1);
+            }
+        }
+    } editing_item;
+
+    bool ShouldConnect()
+    {
         return GWMarketWindow::Instance().visible && !collapsed;
     }
 
-    void Disconnect() {
+    void DrawShopItem(const MarketItem& item, size_t index)
+    {
+        ImGui::PushID(static_cast<int>(index));
+
+        // Item name
+        ImGui::TextUnformatted(item.name.c_str());
+
+        // Quantity
+        ImGui::SameLine(250);
+        ImGui::Text("x%d", item.quantity);
+
+        // Price
+        ImGui::SameLine(350);
+        if (!item.prices.empty()) {
+            const auto& price = item.prices[0];
+            if (auto* texture = GetCurrencyImage(price.type)) {
+                ImGui::Image(*texture, ImVec2(16, 16));
+                ImGui::SameLine();
+            }
+            ImGui::Text("%.0f %s", price.price, GetPriceTypeString(price.type));
+        }
+
+        // Edit button
+        ImGui::SameLine(ImGui::GetContentRegionAvail().x - 50);
+        if (ImGui::SmallButton("Edit")) {
+            editing_item_index = index;
+            editing_item.LoadFrom(item);
+            show_edit_item_window = true;
+        }
+
+        ImGui::PopID();
+    }
+
+    void DrawMyShopWindow()
+    {
+        if (!show_my_shop_window) return;
+
+        ImGui::SetNextWindowSize(ImVec2(600, 400), ImGuiCond_FirstUseEver);
+        if (ImGui::Begin("My Shop", &show_my_shop_window, ImGuiWindowFlags_NoCollapse)) {
+            // Shop status
+            if (!my_shop.is_certified(GetCurrentPlayerName())) {
+                ImGui::TextColored(ImVec4(0.0f, 1.0f, 0.0f, 1.0f), "Shop Status: Verified");
+            }
+            else {
+                ImGui::TextColored(ImVec4(1.0f, 0.5f, 0.0f, 1.0f), "Shop Status: Not Verified");
+                ImGui::SameLine();
+                if (ImGui::Button("Verify Shop")) {
+                    SendAskForCertification();
+                }
+            }
+
+            ImGui::Separator();
+
+            // Shop items list
+            if (my_shop.items.empty()) {
+                ImGui::TextDisabled("No items in shop");
+            }
+            else {
+                ImGui::BeginChild("ShopItems", ImVec2(0, -30), true);
+
+                // Header
+                ImGui::Text("Item Name");
+                ImGui::SameLine(250);
+                ImGui::Text("Quantity");
+                ImGui::SameLine(350);
+                ImGui::Text("Price");
+                ImGui::Separator();
+
+                // Items
+                for (size_t i = 0; i < my_shop.items.size(); i++) {
+                    DrawShopItem(my_shop.items[i], i);
+                }
+
+                ImGui::EndChild();
+            }
+
+            // Footer
+            ImGui::Separator();
+            if (ImGui::Button("Add Item", ImVec2(120, 0))) {
+                editing_item.Reset();
+                editing_item_index = 0xffffffff; // Set to end of list (new item)
+                show_edit_item_window = true;
+            }
+            ImGui::SameLine();
+            if (ImGui::Button("Close", ImVec2(120, 0))) {
+                show_my_shop_window = false;
+            }
+        }
+        ImGui::End();
+    }
+
+    void DrawEditItemWindow()
+    {
+        if (!show_edit_item_window) return;
+
+        const bool is_new_item = editing_item_index >= my_shop.items.size();
+        const char* window_title = is_new_item ? "Add Shop Item" : "Edit Shop Item";
+
+        ImGui::SetNextWindowSize(ImVec2(500, 400), ImGuiCond_FirstUseEver);
+        if (ImGui::Begin(window_title, &show_edit_item_window, ImGuiWindowFlags_NoCollapse)) {
+            // Item name
+            ImGui::InputText("Item Name", editing_item.name_buffer, sizeof(editing_item.name_buffer));
+
+            // Description
+            ImGui::InputTextMultiline("Description", editing_item.description_buffer, sizeof(editing_item.description_buffer));
+
+            
+            // Quantity
+            ImGui::InputInt("Quantity", &editing_item.item.quantity);
+            if (editing_item.item.quantity < 0) editing_item.item.quantity = 0;
+
+            // Price type
+            const char* price_types[] = {"Platinum", "Ecto", "Zkeys", "Arms"};
+            ImGui::Combo("Currency", (int*)&editing_item.price.type, price_types, IM_ARRAYSIZE(price_types));
+
+            // Price amount
+            ImGui::InputFloat("Price", &editing_item.price.price, 1.f, 5.f, "%.0f");
+            if (editing_item.price.price < 0) editing_item.price.price = 0;
+
+            ImGui::Separator();
+
+            // Action buttons
+            if (ImGui::Button("Save", ImVec2(120, 0))) {
+                if (editing_item_index < my_shop.items.size()) {
+                    // Editing existing item
+                    auto& item = my_shop.items[editing_item_index];
+
+                    item = editing_item.item;
+                    item.prices = {editing_item.price};
+
+                    // Update item
+                    item.name = editing_item.name_buffer;
+                    if (*editing_item.description_buffer) {
+                        item.description = editing_item.description_buffer;
+                    }
+
+                    // Update price
+
+                }
+                else {
+                    // Adding new item
+                    auto item = editing_item.item;
+                    item = editing_item.item;
+                    item.prices = {editing_item.price};
+
+                    // Update item
+                    item.name = editing_item.name_buffer;
+                    if (*editing_item.description_buffer) {
+                        item.description = editing_item.description_buffer;
+                    }
+
+                    item.player = my_shop.player;
+                    item.orderType = OrderType::Sell;
+                    item.lastRefresh = time(nullptr);
+
+                    my_shop.items.push_back(item);
+                }
+
+                // Send update to server
+                SendRefreshShop(true);
+
+                editing_item.Reset();
+                show_edit_item_window = false;
+            }
+
+            ImGui::SameLine();
+            if (ImGui::Button("Cancel", ImVec2(120, 0))) {
+                editing_item.Reset();
+                show_edit_item_window = false;
+            }
+
+            // Only show Remove button when editing existing items
+            if (!is_new_item) {
+                ImGui::SameLine();
+                if (ImGui::Button("Remove Item", ImVec2(120, 0))) {
+                    if (editing_item_index < my_shop.items.size()) {
+                        my_shop.items.erase(my_shop.items.begin() + editing_item_index);
+                        SendRefreshShop(true);
+                    }
+                    editing_item.Reset();
+                    show_edit_item_window = false;
+                }
+            }
+        }
+        ImGui::End();
+    }
+
+    void Disconnect()
+    {
         if (!ws) return;
         should_stop = true;
+        SendCloseShop(my_shop);
         if (worker && worker->joinable()) worker->join();
         delete worker;
         worker = 0;
@@ -895,6 +1359,103 @@ namespace {
         ws_connecting = socket_io_ready = false;
     }
 
+    GW::HookEntry OnPostUIMessage_HookEntry;
+    void OnPostUIMessage(GW::HookStatus*, GW::UI::UIMessage, void*, void*)
+    {
+        if (my_shop.uuid.empty()) {
+            const auto account_uuid = GW::AccountMgr::GetPortalAccountUuid();
+            const auto current_player = GW::PlayerMgr::GetPlayerName();
+            if (account_uuid && current_player && *current_player) {
+                my_shop.uuid = TextUtils::GuidToString(account_uuid);
+                my_shop.player = TextUtils::WStringToString(current_player);
+                if (my_shop.certified.empty()) SendAskForCertification();
+            }
+        }
+    }
+
+    struct PendingAddToSell {
+        uint32_t item_id;
+        GuiUtils::EncString* decoded_name = 0;
+        GuiUtils::EncString* decoded_desc = 0;
+        bool ready_to_add() { 
+            return decoded_name && !decoded_name->IsDecoding() && (!decoded_desc || !decoded_desc->IsDecoding());
+        }
+        void reset(GW::Item* item) {
+            if (decoded_name) decoded_name->Release();
+            decoded_name = 0;
+
+            if (!(item && item->name_enc && *item->name_enc)) return;
+
+            item_id = item->item_id;
+            
+            decoded_name = new GuiUtils::EncString();
+            decoded_name->language(GW::Constants::Language::English);
+            decoded_name->reset(item->name_enc);
+            if (item->type == GW::Constants::ItemType::Rune_Mod && item->complete_name_enc && *item->complete_name_enc) 
+                decoded_name->reset(item->complete_name_enc);
+            decoded_name->string();
+            
+            if (decoded_desc) decoded_desc->Release();
+            decoded_desc = 0;
+            if (item->info_string && *item->info_string) {
+                decoded_desc = new GuiUtils::EncString();
+                decoded_desc->language(GW::Constants::Language::English);
+                decoded_desc->reset(item->info_string);
+                decoded_desc->string();
+            }
+        }
+        ~PendingAddToSell() {
+            if (decoded_name) decoded_name->Release();
+            if (decoded_desc) decoded_desc->Release();
+        }
+    } pending_add_to_sell;
+
+    void CheckPendingAddToSell() {
+        if (!pending_add_to_sell.ready_to_add()) return;
+
+        const auto item = (InventoryManager::Item*)GW::Items::GetItemById(pending_add_to_sell.item_id);
+        if (!GWMarketWindow::CanSellItem(item)) {
+            pending_add_to_sell.reset(0);
+            return;
+        }
+        ShopItem market_item;
+        market_item.name = pending_add_to_sell.decoded_name->string();
+        if (item->IsWeapon() || item->IsArmor()) {
+            market_item.description = pending_add_to_sell.decoded_desc ? pending_add_to_sell.decoded_desc->string() : "";
+        }
+
+        if (item->IsInscription()) {
+            market_item.name = TextUtils::Replace(market_item.name, "Inscription: \"([^\"]+)\"", "$1");
+        }
+        market_item.quantity = item->quantity;
+        // market_item.dedicated = ???;
+
+        pending_add_to_sell.reset(0);
+
+        auto attr = item->GetModifier(0x2798);
+        if (attr) {
+            market_item.weaponDetails.attribute = (GW::Constants::Attribute)attr->arg2();
+            market_item.weaponDetails.requirement = attr->arg1() & 0xf;
+            market_item.weaponDetails.inscribable = market_item.description.contains("Inscription: ");
+        }
+        const auto i = GW::Map::GetCurrentMapInfo();
+        market_item.pre = i && i->region == GW::Region::Region_Presearing;
+
+        market_item.description = TextUtils::Replace(market_item.description, "\n?Value:[^\n]+", "");
+        market_item.description = TextUtils::Replace(market_item.description, "\n?Inscription:[^\n]+", "");
+        market_item.description = TextUtils::Replace(market_item.description, R"(^(?!.*(Dmg:|Damage:|\(Requires \d|Armor:)).*$\n?)", "");
+
+        market_item.prices.push_back({
+            .type = Currency::Platinum,
+            .quantity = 1,
+            .price = 5,
+        });
+
+        editing_item.LoadFrom(market_item);
+        editing_item_index = 0xffffffff;
+        show_edit_item_window = true;
+
+    }
 } // namespace
 
 void GWMarketWindow::Initialize()
@@ -902,12 +1463,19 @@ void GWMarketWindow::Initialize()
     ToolboxWindow::Initialize();
     ConnectWebSocket();
     Log::Log("Market Browser initialized");
+
+    const GW::UI::UIMessage ui_messages[] = {GW::UI::UIMessage::kMapLoaded};
+    for (auto ui_message : ui_messages) {
+        GW::UI::RegisterUIMessageCallback(&OnPostUIMessage_HookEntry, ui_message, OnPostUIMessage, 0x4000);
+    }
+    OnPostUIMessage(0, GW::UI::UIMessage::kMapLoaded, 0, 0);
 }
 
 void GWMarketWindow::Terminate()
 {
     Disconnect();
     ToolboxWindow::Terminate();
+    GW::UI::RemoveUIMessageCallback(&OnPostUIMessage_HookEntry);
 }
 
 void GWMarketWindow::Update(float delta)
@@ -933,6 +1501,7 @@ void GWMarketWindow::Update(float delta)
             Disconnect();
             return;
         }
+        SendRefreshShop();
         if (auto_refresh && socket_io_ready) {
             refresh_timer += delta;
             if (refresh_timer >= refresh_interval) {
@@ -941,8 +1510,18 @@ void GWMarketWindow::Update(float delta)
             }
         }
     }
-    if (!ws && ShouldConnect())
-        ConnectWebSocket();
+    if (!ws && ShouldConnect()) ConnectWebSocket();
+}
+
+bool GWMarketWindow::CanSellItem(GW::Item* _item)
+{
+    const auto item = (InventoryManager::Item*)_item;
+    return my_shop.valid() && item && item->IsTradable() && !item->customized;
+}
+
+void GWMarketWindow::AddItemToSell(GW::Item* _item) {
+    if (!CanSellItem(_item)) return;
+    pending_add_to_sell.reset(_item);
 }
 
 void GWMarketWindow::LoadSettings(ToolboxIni* ini)
@@ -1018,6 +1597,10 @@ void GWMarketWindow::DrawSettingsInternal()
 
 void GWMarketWindow::Draw(IDirect3DDevice9*)
 {
+    // Draw shop windows
+    DrawMyShopWindow();
+    DrawEditItemWindow();
+    CheckPendingAddToSell();
     if (!visible) return;
 
     ImGui::SetNextWindowSize(ImVec2(900, 700), ImGuiCond_FirstUseEver);
@@ -1036,6 +1619,11 @@ void GWMarketWindow::Draw(IDirect3DDevice9*)
         ImGui::SameLine();
         if (ImGui::Button("Refresh")) {
             Refresh();
+        }
+
+        ImGui::SameLine();
+        if (ImGui::Button("My Shop")) {
+            show_my_shop_window = true;
         }
 
         ImGui::Separator();
@@ -1084,9 +1672,9 @@ void GWMarketWindow::Draw(IDirect3DDevice9*)
         DrawFavoritesList();
         ImGui::EndChild();
 
-        
 
-            /* Link to website footer */
+
+        /* Link to website footer */
         static char buf[128];
         if (!buf[0]) {
             const auto url = std::format("https://{}", market_host);
@@ -1101,4 +1689,6 @@ void GWMarketWindow::Draw(IDirect3DDevice9*)
         }
     }
     ImGui::End();
+
+
 }

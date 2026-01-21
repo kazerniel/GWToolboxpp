@@ -16,6 +16,8 @@ namespace TextUtils {
     std::wstring SanitiseFilename(std::wstring_view str);
     std::string PrintFilename(std::string path);
     std::wstring PrintFilename(std::wstring path);
+    std::wstring Replace(const std::wstring_view subject, const std::wstring& pattern, const std::wstring& replacement);
+    std::string Replace(const std::string_view subject, const std::string& pattern, const std::string& replacement);
 
     std::string Base64Decode(std::string_view str);
 

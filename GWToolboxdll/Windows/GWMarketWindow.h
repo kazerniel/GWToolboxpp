@@ -5,6 +5,10 @@
 #include <vector>
 #include <map>
 
+namespace GW {
+    struct Item;
+}
+
 class GWMarketWindow : public ToolboxWindow {
     GWMarketWindow() {};
     ~GWMarketWindow() {};
@@ -24,6 +28,9 @@ public:
     void Draw(IDirect3DDevice9* pDevice) override;
     void Update(float) override;
     
+    static bool CanSellItem(GW::Item* item);
+    static void AddItemToSell(GW::Item* item);
+
     void LoadSettings(ToolboxIni* ini) override;
     void SaveSettings(ToolboxIni* ini) override;
     void DrawSettingsInternal() override;

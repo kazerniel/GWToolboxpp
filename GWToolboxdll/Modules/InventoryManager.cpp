@@ -33,8 +33,11 @@
 #include <Windows/MaterialsWindow.h>
 #include <Windows/DailyQuestsWindow.h>
 #include <Windows/ArmoryWindow.h>
+#include <Windows/GWMarketWindow.h>
+
 #include <GWCA/GameEntities/Frame.h>
 #include <Utils/ToolboxUtils.h>
+#include <Utils/TextUtils.h>
 
 namespace {
     InventoryManager& Instance()
@@ -1748,7 +1751,7 @@ bool InventoryManager::IsSameItem(const GW::Item* item1, const GW::Item* item2)
     return item1 && item2
         && (!item1->model_file_id || item1->model_file_id == item2->model_file_id)
         && (item1->type != GW::Constants::ItemType::Dye || memcmp(&item1->dye,&item2->dye,sizeof(item1->dye)) == 0)
-        && wcseq(item1->name_enc, item2->name_enc);
+        && ::wcseq(item1->name_enc, item2->name_enc);
 }
 
 bool InventoryManager::IsPendingIdentify() const
@@ -2313,7 +2316,14 @@ bool InventoryManager::DrawItemContextMenu(const bool open)
             goto end_popup;
         }
     }
-end_popup:
+    if (GWMarketWindow::CanSellItem(context_item.item())) {
+        if (ImGui::Button("Sell Item on Market", size)) {
+            ImGui::CloseCurrentPopup();
+            GWMarketWindow::AddItemToSell(context_item.item());
+            goto end_popup;
+        }
+    }
+    end_popup:
     ImGui::PopStyleColor();
     ImGui::PopStyleVar();
     ImGui::EndPopup();

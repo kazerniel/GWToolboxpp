@@ -258,6 +258,19 @@ namespace TextUtils {
         return {};
     }
 
+    std::wstring Replace(const std::wstring_view subject, const std::wstring& pattern, const std::wstring& replacement)
+    {
+        std::wregex regex(pattern);
+        std::wstring subject_str(subject);
+        return std::regex_replace(subject_str, regex, replacement);
+    }
+    std::string Replace(const std::string_view subject, const std::string& pattern, const std::string& replacement)
+    {
+        std::regex regex(pattern);
+        std::string subject_str(subject);
+        return std::regex_replace(subject_str, regex, replacement);
+    }
+
     // Convert a wide Unicode string to an UTF8 string
     std::string WStringToString(const std::wstring_view str)
     {
