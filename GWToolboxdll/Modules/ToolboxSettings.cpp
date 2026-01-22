@@ -72,6 +72,7 @@
 #endif
 #include <Windows/TargetInfoWindow.h>
 #include <Windows/GWMarketWindow.h>
+#include <Windows/InventorySorting.h>
 
 #include <Widgets/TimerWidget.h>
 #include <Widgets/HealthWidget.h>
@@ -216,7 +217,8 @@ namespace {
         EnemyWindow::Instance(),
         TargetInfoWindow::Instance(),
         DropTrackerWindow::Instance(),
-        GWMarketWindow::Instance()
+        GWMarketWindow::Instance(),
+        InventorySorting::Instance()
     };
 
     bool modules_sorted = false;
