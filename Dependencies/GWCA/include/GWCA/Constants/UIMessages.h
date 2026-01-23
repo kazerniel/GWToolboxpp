@@ -213,6 +213,10 @@ namespace GW {
             kDisableEnterMissionBtn = 0x1000012A,        // 0x1000012A, wparam = boolean (1 = disabled, 0 = enabled)
             kShowCancelEnterMissionBtn = 0x1000012D,     // 0x1000012D
             kPartyDefeated = 0x1000012F,                 // 0x1000012F
+            kPartySearchCreated = 0x10000133,            // 0x10000136 wparam = GW::PartySearch*
+            kPartySearchIdChanged = 0x10000134,          // 0x10000134 wparam = uint32_t* party_search_id
+            kPartySearchRemoved = 0x10000135,            // 0x10000136 wparam = uint32_t* party_search_id
+            kPartySearchUpdated = 0x10000136,            // 0x10000136 wparam = GW::PartySearch*
             kPartySearchInviteReceived = 0x10000137,     // 0x10000137, wparam = UIPacket::kPartySearchInviteReceived*
             kPartySearchInviteSent = 0x10000139,         // 0x10000139
             kPartyShowConfirmDialog = 0x1000013A,        // 0x1000013A, wparam = UIPacket::kPartyShowConfirmDialog
