@@ -19,7 +19,7 @@ The Armory Window is a powerful feature that allows you to preview all armor in 
 5. Use the color pickers to change the dye colors for each part of the armor piece.
 6. Use the campaign filter to narrow down the armor options if desired.
 
-Note that every armor piece can also be applied using a chat command. The correct command format is shown when you hover over an item in the Armory Window. For example: `/armory "Imposing Mask" 3 3 3 3`. This will apply the selected item to your character using the specified dye color values.
+Note that every armor piece can also be applied using a chat command. The correct command format is shown when you hover over an item in the Armory Window. For example: `/armory "Imposing Mask" 3 3 3 3`. The text in quotes is the internal armor identifier, and the four numbers after it are the dye channels applied to that piece, which together apply the selected item to your character using the specified dye color values.
 
 ## Notes
 
