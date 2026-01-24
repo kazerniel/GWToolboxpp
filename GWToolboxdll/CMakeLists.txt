@@ -29,7 +29,7 @@ target_compile_definitions(GWToolboxdll PRIVATE
     "_USRDLL"
     "GWCA_IMPORT"
     )
-     
+      
 target_compile_options(GWToolboxdll PRIVATE /W4 /WX /Gy /utf-8)
 target_compile_options(GWToolboxdll PRIVATE $<$<CONFIG:Debug>:/ZI /Od>)
 target_compile_options(GWToolboxdll PRIVATE $<$<CONFIG:RelWithDebInfo>:/Zi>)
