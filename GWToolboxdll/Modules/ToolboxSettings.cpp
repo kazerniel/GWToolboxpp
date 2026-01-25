@@ -162,7 +162,7 @@ namespace {
 #if 0
         ExtraWeaponSets::Instance(),
 #endif
-        TextToSpeechModule::Instance(),
+        {TextToSpeechModule::Instance(), false},
         AudioSettings::Instance(),   
         FpsFix::Instance(),          
         GamepadModule::Instance()
