@@ -658,9 +658,7 @@ void Minimap::Initialize()
         hide_flagging_controls_patch.SetPatch(address, "\xeb", 1);
     }
 
-    address = GW::Scanner::Find("\x68\x00\x09\x14\x00", "xxxxx");
-    if (address)
-        DrawCompassAgentsByType_Func = (DrawCompassAgentsByType_pt)GW::Scanner::FunctionFromNearCall(GW::Scanner::FindInRange("\xe8", "x", 0, address, address + 0xf));
+    DrawCompassAgentsByType_Func = (DrawCompassAgentsByType_pt)GW::Scanner::FunctionFromNearCall(GW::Scanner::Find("\x68\x00\x09\x14\x00\x57\x56\xe8", "xxxxxxxx",7));
 
 #ifdef _DEBUG
     ASSERT(DrawCompassAgentsByType_Func);
