@@ -32,6 +32,7 @@
 #include <Functiondiscoverykeys_devpkey.h>
 #include <endpointvolume.h>
 #include <mmdeviceapi.h>
+#include <GWCA/Managers/MemoryMgr.h>
 
 namespace {
 
@@ -1332,6 +1333,12 @@ return audio_data;
     {
         if (generating_voice || !audio) return;
         generating_voice = true;
+        if (GW::MemoryMgr::GetGWWindowHandle() != GetActiveWindow()) {
+            VoiceLog("Guild Wars not in focus");
+            delete audio;
+            generating_voice = false;
+            return;
+        }
         if (audio->gender == Gender::Unknown) {
             VoiceLog("Unknown Gender");
             delete audio;
