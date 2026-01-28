@@ -98,28 +98,22 @@ namespace {
                 }
             }
             else if (arg1 == L"speed") {
-                if (argc < 3) {
-                    cam_speed = default_cam_speed;
-                }
-                else {
+                if (argc > 2) {
                     const std::wstring arg2 = TextUtils::ToLower(argv[2]);
                     if (arg2 == L"default") {
                         cam_speed = default_cam_speed;
                     }
-                    else {
-                        float speed = 0.0f;
-                        if (!TextUtils::ParseFloat(arg2.c_str(), &speed)) {
-                            Log::Error("Invalid argument '%ls', please use a float value", argv[2]);
-                            return;
-                        }
+                    float speed = 0.0f;
+                    if (TextUtils::ParseFloat(arg2.c_str(), &speed)) {
                         cam_speed = speed;
-                        Log::Flash("Camera speed is now %f", speed);
                     }
                 }
+                Log::Flash("Camera speed is now %f", cam_speed);
             }
             else {
                 Log::Error("Invalid argument.");
             }
+            
         }
     }
 }
