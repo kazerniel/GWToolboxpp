@@ -1415,7 +1415,7 @@ namespace Pathing {
         }
     }
 
-    MilePath::MilePath(GW::MapContext* map_context)
+    MilePath::MilePath([[maybe_unused]] GW::MapContext* map_context)
     {
         //constexpr size_t sz = sizeof(Impl);
         static_assert(sizeof(opaque) >= sizeof(Impl));
