@@ -364,8 +364,10 @@ namespace {
             return false; // Not finished terminating
         }
         vec.push_back(&m);
+        Log::Log("ToggleTBModule: Initializing %s...", m.Name());
         m.Initialize();
         m.LoadSettings(GWToolbox::OpenSettingsFile());
+        Log::Log("ToggleTBModule: Initialised %s !!", m.Name());
         ReorderModules(vec);
         return true; // Added successfully
     }
