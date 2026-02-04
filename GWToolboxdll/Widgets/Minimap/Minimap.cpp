@@ -315,7 +315,6 @@ namespace {
 
         compass_context = message->wParam ? * (CompassContext**)message->wParam : nullptr;
         switch (message->message_id) {
-             
             case GW::UI::UIMessage::kFrameMessage_0x44: {
                 if (OverrideCompassVisibility()) {
                     break;
@@ -717,6 +716,7 @@ void Minimap::OnUIMessage(GW::HookStatus* status, const GW::UI::UIMessage msgid,
             in_interface_settings = false;
             EnsureCompassIsLoaded();
             instance.pmap_renderer.Invalidate();
+            GameWorldRenderer::TriggerSyncAllMarkers();
             loading = false;
             is_observing = GW::Map::GetIsObserving();
             // Cycle active quests to cache their markers
