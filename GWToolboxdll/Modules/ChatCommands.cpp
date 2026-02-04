@@ -3041,7 +3041,7 @@ void GetFlaggableHeroNames(std::function<void(std::map<uint32_t, std::wstring>*)
 
 void CHAT_CMD_FUNC(ChatCommands::CmdHeroBehaviour)
 {
-    const wchar_t* syntax = L"Syntax: /hero [avoid|guard|attack|target] [hero_name]";
+    const wchar_t* syntax = L"Syntax: /hero [avoid|guard|attack|target] [hero_name|hero_index]";
 
     GW::WorldContext* w = GW::GetWorldContext();
     GW::HeroFlagArray* flags = w ? &w->hero_flags : nullptr;
@@ -3085,17 +3085,18 @@ void CHAT_CMD_FUNC(ChatCommands::CmdHeroBehaviour)
         return;
     }
     std::wstring hero_name = argv[2];
-    const auto index = static_cast<size_t>(_wtoi(hero_name.c_str()));
-    if (index > 0) {
-        if (index > flags->size()) {
-            Log::ErrorW(L"Hero index %d is out of range!", index);
+    size_t hero_index = 0; // This is 1 based!
+    if (TextUtils::ParseUInt(hero_name.c_str(), &hero_index)) {
+        if (hero_index < 1 || hero_index > flags->size()) {
+            Log::ErrorW(L"Failed to find hero %d", hero_index);
+            return;
         }
         size_t out_index = 0;
-        for (const auto hero_flag : *flags) {
-            const auto hero_id =static_cast<GW::Constants::HeroID>(hero_flag.hero_id);
+        for (const auto& flag : *flags) {
+            const auto hero_id = static_cast<GW::Constants::HeroID>(flag.hero_id);
             HeroBuildsWindow::GetPartyHeroByID(hero_id, &out_index);
-            if (out_index == index) {
-                flag_hero(hero_flag.agent_id);
+            if (out_index == hero_index) {
+                flag_hero(flag.agent_id);
                 return;
             }
         }
