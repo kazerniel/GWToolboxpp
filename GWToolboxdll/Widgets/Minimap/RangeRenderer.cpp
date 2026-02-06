@@ -215,6 +215,10 @@ void RangeRenderer::Render(IDirect3DDevice9* device)
     device->DrawPrimitive(type, vertices_offset, circle_triangles);
     vertices_offset += circle_points;
 
+    // Spirit Extended range
+    device->DrawPrimitive(type, vertices_offset, circle_triangles);
+    vertices_offset += circle_points;
+
     // Cast range
     device->DrawPrimitive(type, vertices_offset, circle_triangles);
     vertices_offset += circle_points;
