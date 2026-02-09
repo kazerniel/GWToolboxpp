@@ -89,12 +89,12 @@ namespace {
             const auto tmpAstar = new Pathing::AStar(milepath);
             const auto res = tmpAstar->Search(from, to);
             if (res != Pathing::Error::OK) {
-                Log::Error("Pathing failed; Pathing::Error code %d", res);
+                Log::Log("Pathing failed; Pathing::Error code %d", res);
                 delete tmpAstar;
                 return;
             }
             if (!tmpAstar->m_path.ready()) {
-                Log::Error("Pathing failed; tmpAstar->m_path not ready");
+                Log::Log("Pathing failed; tmpAstar->m_path not ready");
                 delete tmpAstar;
                 return;
             }
