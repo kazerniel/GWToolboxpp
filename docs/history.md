@@ -7,6 +7,9 @@ layout: default
 Previous releases are available on Github as dll files. There is no support for older releases. If you are looking for
 the latest version, go to the [Home Page](./) instead.
 
+## Version 8.13
+* [Fix] Fixed tolbox failing to inject for people without vcredist
+
 ## Version 8.12
 * [Fix] Fixed toolbox for gw 38127
 * [Fix] Fixed occasional incorrect path generation
