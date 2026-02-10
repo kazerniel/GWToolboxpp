@@ -1280,7 +1280,7 @@ namespace Pathing {
             for (auto& v : m_visGraph)
                 v.reserve(32);
 
-#pragma omp parallel
+//#pragma omp parallel
             {
                 std::vector<node> open;
                 open.resize(2000); // max DFS depth
@@ -1292,7 +1292,7 @@ namespace Pathing {
                 vis_points.init(points.size());
                 auto size = (int)points.size();
 
-#pragma omp for schedule(static, 4)
+//#pragma omp for schedule(static, 4)
                 for (int i = 0; i < size; ++i) {
                     if (m_terminateThread) break;
                     const auto& point = points[i];
