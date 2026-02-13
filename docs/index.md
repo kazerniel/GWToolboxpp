@@ -6,102 +6,109 @@ layout: default
 GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancements for the original Guild Wars. It adds features that should exist in a modern game and tools to visualize information and improve the player experience.
 
 # List of Features
-<div style="float: left; width: 80%;">
-	<table>
-		<tr>
-			<th><a href="windows">Windows</a></th>
-			<th><a href="widgets">Widgets</a></th>
-			<th>Other Features</th>
-		</tr>
-		<tr>
-			<td><a href="builds">Builds</a></td>
-			<td><a href="widgets#bonds">Bonds Monitor</a></td>
-			<td><a href="settings#game_settings">Borderless Window</a></td>
-		</tr>
-		<tr>
-			<td><a href="dialogs">Dialogs</a></td>
-			<td><a href="widgets#clock">Clock</a></td>
-			<td><a href="camera">Customizable Camera</a></td>
-		</tr>
-		<tr>
-			<td><a href="hotkeys">Hotkeys</a></td>
-			<td><a href="damage_monitor">Damage Monitor</a></td>
-			<td><a href="commands">Chat Commands</a></td>
-		</tr>
-		<tr>
-			<td><a href="info">Info</a></td>
-			<td><a href="widgets#distance">Distance Monitor</a></td>
-			<td><a href="chatfilter">Chat Filter</a></td>
-		</tr>
-		<tr>
-			<td><a href="materials">Materials Buyer</a></td>
-			<td><a href="widgets#health">Health Monitor</a></td>
-			<td><a href="settings#game_settings">Flash GW in taskbar when receiving a PM</a></td>
-		</tr>
-		<tr>
-			<td><a href="windows#notepad">Notepad</a></td>
-			<td><a href="widgets#timer">Instance Timer</a></td>
-			<td><a href="settings#toolbox_settings">Save Location Data</a></td>
-		</tr>
-		<tr>
-			<td><a href="pcons">Auto Pcons</a></td>
-			<td><a href="minimap">Minimap</a></td>
-			<td><a href="settings#game_settings">Target with double-click on message author</a></td>
-		</tr>
-		<tr>
-			<td><a href="settings">Settings</a></td>
-			<td><a href="widgets#vanquish">Vanquish Monitor</a></td>
-			<td><a href="text-to-speech">Text-to-Speech</a></td>
-		</tr>
-		<tr>
-			<td><a href="travel">Travel</a></td>
-			<td><a href="widgets#alcohol">Alcohol Monitor</a></td>
-			<td><a href="theme">Theme editor</a></td>
-		</tr>
-		<tr>
-			<td><a href="herobuilds">Hero Builds</a></td>
-                        <td><a href="misc_widgets">Miscellaneous Widgets</a></td>
-			<td><a href="settings#game_settings">URLs in equipment templates</a></td>
-		</tr>
-		<tr>
-			<td><a href="trade">Trade</a></td>
-			<td><a href="items">Items</a></td>
-			<td><a href="integrations">Integrations</a></td>
-		</tr>
-		<tr>
-			<td><a href="hallofmonuments">Hall of Monuments</a></td>
-			<td><a href="quest">Quest Features</a></td>
-			<td><a href="input_modules">Input</a></td>
-		</tr>
-		<tr>
-			<td><a href="completion">Completion</a></td>
-			<td><a href="party_window">Party</a></td>
-            <td><a href="plugins">Plugins</a></td>
-		</tr>
-		<tr>
-			<td><a href="armory_window">Armory</a></td>
-			<td><a href="target_widgets">Target</a></td>
-            <td></td>
-		</tr>
-		<tr>
-			<td><a href="duping_window">Duping</a></td>
-			<td><a href="enemy_window">Enemy</a></td>
-            <td></td>
-		</tr>
-	</table>
-</div>
 
-<div style="float: right; width: 15%; margin-left: 5%;">
-	<img src="https://user-images.githubusercontent.com/11432831/28233445-c7762ff4-68ab-11e7-9388-9437c8987a61.PNG" style="float: right;" />
-</div>
+<ul class="multi-column-list">
+  <li><strong>General</strong>
+    <ul>
+      <li><a href="theme">Theme</a></li>
+      <li><a href="settings">Toolbox Settings</a></li>
+      <li>Audio Settings</li>
+      <li><a href="chat">Chat Settings</a></li>
+      <li>Game Settings</li>
+      <li>Inventory Settings</li>
+      <li>Notifications</li>
+      <li>Party Settings</li>
+    </ul>
+  </li>
+  <li><strong>Modules</strong>
+    <ul>
+      <li><a href="camera">Camera Unlock</a></li>
+      <li><a href="chatfilter">Chat Filter</a></li>
+      <li>Code Optimiser</li>
+      <li>Discord</li>
+      <li>Fps Fix</li>
+      <li>Gamepad Module</li>
+      <li>Guild Wars Settings</li>
+      <li>Hints</li>
+      <li>Item Filter</li>
+      <li>Keyboard Layout Fix</li>
+      <li>Mouse Settings</li>
+      <li>Notifications</li>
+      <li>Observer Module</li>
+      <li>Party Broadcast</li>
+      <li><a href="party_window">Party Window</a></li>
+      <li><a href="plugins">Plugins</a></li>
+      <li>Price Checker</li>
+      <li><a href="quest">Quest Module</a></li>
+      <li>Resign Log</li>
+      <li>Salvage Info</li>
+      <li>Teamspeak 3</li>
+      <li>Teamspeak 5</li>
+      <li><a href="text-to-speech">Text-to-speech</a></li>
+      <li>Twitch</li>
+    </ul>
+  </li>
+  <li><a href="windows"><strong>Windows</strong></a>
+    <ul>
+      <li><a href="armory_window">Armory</a></li>
+      <li><a href="builds">Builds</a></li>
+      <li><a href="completion">Completion</a></li>
+      <li>Daily Quests</li>
+      <li>Drop Tracker</li>
+      <li><a href="duping_window">Duping</a></li>
+      <li><a href="enemy_window">Enemy Window</a></li>
+      <li>Faction Leaderboard</li>
+      <li>Friend List</li>
+      <li><a href="herobuilds">Hero Builds</a></li>
+      <li><a href="hotkeys">Hotkeys</a></li>
+      <li><a href="info">Info</a></li>
+      <li>Inventory Sorting</li>
+      <li>Market Browser</li>
+      <li><a href="materials">Materials</a></li>
+      <li><a href="windows#notepad">Notepad</a></li>
+      <li>Objectives</li>
+      <li>Observer Export</li>
+      <li>Observer Parties</li>
+      <li>Observer Player</li>
+      <li>Observer Target</li>
+      <li>Party Statistics</li>
+      <li><a href="pcons">Pcons</a></li>
+      <li><a href="reroll">Reroll</a></li>
+      <li><a href="target_widgets">Target Widgets</a></li>
+      <li><a href="trade">Trade</a></li>
+      <li><a href="travel">Travel</a></li>
+    </ul>
+  </li>
+  <li><a href="widgets"><strong>Widgets</strong></a>
+    <ul>
+      <li>Active Quest Info</li>
+      <li><a href="widgets#alcohol">Alcohol</a></li>
+      <li><a href="widgets#bonds">Bonds</a></li>
+      <li><a href="widgets#clock">Clock</a></li>
+      <li><a href="damage_monitor">Damage</a></li>
+      <li><a href="widgets#distance">Distance</a></li>
+      <li>Effect Durations</li>
+      <li><a href="widgets#health">Health</a></li>
+      <li>Latency</li>
+      <li><a href="minimap">Minimap</a></li>
+      <li>Mission Map</li>
+      <li>Skill Monitor</li>
+      <li>Skillbar</li>
+      <li><a href="widgets#timer">Timer</a></li>
+      <li>Title Tracker</li>
+      <li><a href="widgets#vanquish">Vanquish</a></li>
+      <li>World Map</li>
+    </ul>
+  </li>
+  <li><strong>Other Features</strong>
+    <ul>
+      <li><a href="commands">Chat Commands</a></li>
+    </ul>
+  </li>
+</ul>
 
-<div style="clear: both;">
-	<h2>Main Window</h2>
-	<p>The Main Window serves as a central hub for quickly toggling various windows and widgets in GWToolbox++. It provides easy access to the tools you use most frequently, allowing you to customize your interface on the fly.</p>
-</div>
+<h2>Main Window</h2>
+<img src="https://user-images.githubusercontent.com/11432831/28233445-c7762ff4-68ab-11e7-9388-9437c8987a61.PNG" style="float: right; width: 15%; margin-left: 5%;" alt="Screenshot of Toolbox's main menu, listing various widgets." />
+<p>The Main Window serves as a central hub for quickly toggling various windows and widgets in GWToolbox++. It provides easy access to the tools you use most frequently, allowing you to customize your interface on the fly.</p>
 
-<div style="float: right; width: 15%; margin-left: 5%;">
-	<img src="https://user-images.githubusercontent.com/11432831/28233445-c7762ff4-68ab-11e7-9388-9437c8987a61.PNG" style="float: right;" />
-</div>
-
-<h3 style="display: block; clear: both;">Have an issue or want a new feature? Check the <a href="{{ site.github.issues_url }}">Issue Tracker</a>!</h3>
+<strong style="display: block; clear: both;">Have an issue or want a new feature? Check the <a href="{{ site.github.issues_url }}">Issue Tracker</a>!</strong>
