@@ -18,49 +18,47 @@
 
   </head>
   <body>
-    <div id="header">
-      <nav>
-        <ul>
-          <li class="fork"><a href="{{ site.github.repository_url }}">GitHub</a></li>
-          <li class="button-left"><a href="{{ site.discord_url }}">Discord</a></li>
-          <li class="button-left"><a href="faq">FAQ</a></li>
-          <li class="button-left"><a href="credits">Credits</a></li>
-          {% if site.show_downloads %}
-          <li class="downloads"><a href="history">Version History</a></li>
-          {% if site.github.latest_release %}
-          <li class="downloads"><a href="{{ site.download_url }}">GWToolbox++ {{ site.toolbox_version }}</a></li>
-          {% endif %}
-          <li class="title">DOWNLOADS</li>
-          {% endif %}
-        </ul>
-      </nav>
-    </div><!-- end header -->
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div id="navigation-top">
+        <nav>
+          <ul>
+            <li class="fork"><a href="{{ site.github.repository_url }}">GitHub</a></li>
+            <li class="button-left"><a href="{{ site.discord_url }}">Discord</a></li>
+            <li class="button-left"><a href="faq">FAQ</a></li>
+            <li class="button-left"><a href="credits">Credits</a></li>
+            {% if site.show_downloads %}
+            <li class="downloads"><a href="history">Version History</a></li>
+            {% if site.github.latest_release %}
+            <li class="downloads"><a href="{{ site.download_url }}">GWToolbox++ {{ site.toolbox_version }}</a></li>
+            {% endif %}
+            <li class="title">DOWNLOADS</li>
+            {% endif %}
+          </ul>
+        </nav>
+    </div><!-- end navigation-top -->
 
-    <div class="wrapper">
+    <header class="wrapper">
+        <section>
+          <div id="title">
+            <a href="{{ site.github.url }}" class="site-title">{{ site.title | default: site.github.repository_name }}</a>
+            <p>{{ site.description | default: site.github.project_tagline }}</p>
+            <hr>
+            <span class="credits left">Project maintained by
+              <a href="https://github.com/HasKha">HasKha</a>,
+              <a href="https://github.com/GregLando113"> GregLando113</a>,
+              <a href="https://github.com/reduf">reduf</a>,
+              <a href="https://github.com/3vcloud">3vcloud</a>,
+              <a href="https://github.com/DubbleClick">DubbleClick</a>,
+              <a href="https://github.com/Hour-of-the-Owl">Hour-of-the-Owl</a>,
+              <a href="https://github.com/DarkManic">DarkManic</a>
+            </span>
+          </div>
+        </section>
+    </header>
 
-      <section>
-        <div id="title">
-          <h1><a href="{{ site.github.url }}">{{ site.title | default: site.github.repository_name }}</a></h1>
-          <p>{{ site.description | default: site.github.project_tagline }}</p>
-          <hr>
-          <span class="credits left">Project maintained by 
-            <a href="https://github.com/HasKha">HasKha</a>,
-            <a href="https://github.com/GregLando113"> GregLando113</a>,
-            <a href="https://github.com/reduf">reduf</a>,
-            <a href="https://github.com/3vcloud">3vcloud</a>,
-            <a href="https://github.com/DubbleClick">DubbleClick</a>,
-            <a href="https://github.com/Hour-of-the-Owl">Hour-of-the-Owl</a>,
-            <a href="https://github.com/DarkManic">DarkManic</a>
-          </span>
-        </div>
-
-        <main>
-          {{ content }}
-        </main>
-
-      </section>
-
-    </div>
+	<main class="wrapper" id="content">
+		{{ content }}
+	</main>
 
     {% if site.google_analytics %}
       <script type="text/javascript">
