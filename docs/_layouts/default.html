@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
@@ -14,25 +14,27 @@
     <!--[if lt IE 8]>
     <link rel="stylesheet" href="{{ '/assets/css/ie.css' | relative_url }}">
     <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
   </head>
   <body>
-      <div id="header">
-        <nav>
+    <div id="header">
+      <nav>
+        <ul>
           <li class="fork"><a href="{{ site.github.repository_url }}">GitHub</a></li>
           <li class="button-left"><a href="{{ site.discord_url }}">Discord</a></li>
           <li class="button-left"><a href="faq">FAQ</a></li>
           <li class="button-left"><a href="credits">Credits</a></li>
           {% if site.show_downloads %}
-            <li class="downloads"><a href="history">Version History</a></li>
-            {% if site.github.latest_release %}
-              <li class="downloads"><a href="{{ site.download_url }}">GWToolbox++ {{ site.toolbox_version }}</a></li>
-            {% endif %}
-            <li class="title">DOWNLOADS</li>
+          <li class="downloads"><a href="history">Version History</a></li>
+          {% if site.github.latest_release %}
+          <li class="downloads"><a href="{{ site.download_url }}">GWToolbox++ {{ site.toolbox_version }}</a></li>
           {% endif %}
-        </nav>
-      </div><!-- end header -->
+          <li class="title">DOWNLOADS</li>
+          {% endif %}
+        </ul>
+      </nav>
+    </div><!-- end header -->
 
     <div class="wrapper">
 
@@ -46,13 +48,15 @@
             <a href="https://github.com/GregLando113"> GregLando113</a>,
             <a href="https://github.com/reduf">reduf</a>,
             <a href="https://github.com/3vcloud">3vcloud</a>,
-			<a href="https://github.com/DubbleClick">DubbleClick</a>,
+            <a href="https://github.com/DubbleClick">DubbleClick</a>,
             <a href="https://github.com/Hour-of-the-Owl">Hour-of-the-Owl</a>,
             <a href="https://github.com/DarkManic">DarkManic</a>
           </span>
         </div>
 
-        {{ content }}
+        <main>
+          {{ content }}
+        </main>
 
       </section>
 
