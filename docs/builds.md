@@ -3,7 +3,7 @@ layout: default
 ---
 
 <figure>
-<img src="https://i.imgur.com/Z6kP0V1.png"/>
+<img src="assets/images/builds.png"/>
 <figcaption>Edit Teambuild Window</figcaption>
 </figure>
 
