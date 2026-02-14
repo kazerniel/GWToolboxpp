@@ -20,6 +20,14 @@ GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancemen
       <li>Party Settings</li>
     </ul>
   </li>
+  <li><strong>Other Features</strong>
+    <ul>
+      <li><a href="commands">Chat Commands</a></li>
+      <li><a href="main_window">Main Window</a></li>
+      <li><a href="folder">Settings folder</a></li>
+      <li><a href="toolbox_launcher">Toolbox Launcher</a></li>
+    </ul>
+  </li>
   <li><strong>Modules</strong>
     <ul>
       <li><a href="camera">Camera Unlock</a></li>
@@ -58,7 +66,7 @@ GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancemen
       <li><a href="duping_window">Duping</a></li>
       <li><a href="enemy_window">Enemy Window</a></li>
       <li>Faction Leaderboard</li>
-      <li>Friend List</li>
+      <li><a href="friend_list">Friend List</a></li>
       <li><a href="herobuilds">Hero Builds</a></li>
       <li><a href="hotkeys">Hotkeys</a></li>
       <li><a href="info">Info</a></li>
@@ -100,15 +108,6 @@ GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancemen
       <li>World Map</li>
     </ul>
   </li>
-  <li><strong>Other Features</strong>
-    <ul>
-      <li><a href="commands">Chat Commands</a></li>
-    </ul>
-  </li>
 </ul>
 
-<h2>Main Window</h2>
-<img src="https://user-images.githubusercontent.com/11432831/28233445-c7762ff4-68ab-11e7-9388-9437c8987a61.PNG" style="float: right; width: 15%; margin-left: 5%;" alt="Screenshot of Toolbox's main menu, listing various widgets." />
-<p>The Main Window serves as a central hub for quickly toggling various windows and widgets in GWToolbox++. It provides easy access to the tools you use most frequently, allowing you to customize your interface on the fly.</p>
-
-<strong style="display: block; clear: both;">Have an issue or want a new feature? Check the <a href="{{ site.github.issues_url }}">Issue Tracker</a>!</strong>
+<p style="clear: both; font-size: 1.33em;">Have an issue or want a new feature? Check the <a href="{{ site.github.issues_url }}">Issue Tracker</a>!</p>
