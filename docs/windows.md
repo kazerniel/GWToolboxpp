@@ -49,9 +49,6 @@ Sends team builds to party chat.
 ## Travel ([more info](travel))
 Fast travel to any outpost in the game.
 
-## Dialogs ([more info](dialogs))
-Sends dialogs to NPCs.
-
 ## Info ([more info](info))
 Displays various pieces of useful information.
 
