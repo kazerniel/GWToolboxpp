@@ -66,6 +66,11 @@ a small {
   display:block;
 }
 
+ol,
+ul {
+    padding: 0 0 0 1.33em;
+}
+
 ul{
   list-style-image:url('../images/bullet.png');
 }
@@ -302,7 +307,7 @@ section {
 
 ul.multi-column-list {
   column-count: auto;
-  column-width: 300px;
+  column-width: 15em;
 
   li {
     break-inside: avoid-column;
@@ -310,7 +315,6 @@ ul.multi-column-list {
 
   ul {
     column-count: 1;
-    column-width: 200px;
     break-before: avoid-column;
   }
 }
