@@ -1,8 +1,9 @@
 ---
 layout: default
 ---
+
 <figure>
-<img src="https://i.imgur.com/kWoP9uB.png"/>
+<img src="assets/images/hero_builds.png"/>
 <figcaption>Edit Hero Teambuild Window</figcaption>
 </figure>
 
