@@ -1,71 +1,11 @@
 ---
 ---
 
-@import "{{ site.theme }}";
-.button-left {float: left; margin-left: 6px;}
-#header nav {max-width: 1080px;margin: 0 auto;padding: 0 10px;background: blue;margin: 6px auto;}
-.wrapper {max-width: 1080px;margin: 0 auto;position: relative;padding: 0 20px;}
-section {max-width: 1080px;padding: 30px 0px 50px 0px;margin: 20px 0;margin-top: 70px;}
-code {font-family: 'Lucida Sans', Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;color: #efefef;font-size: 13px; margin: 0 0px; padding: 0px 0px; border-radius: 2px;}
-body {padding: 0px 0 20px 0px;margin: 0px;font: 14px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;color: #f0e7d5;font-weight: normal;background: #0f0f0f;background-attachment: fixed !important;background: linear_gradient(#2a2a29, #1c1c1c);}
-#header nav li a { color: white; border: 1px solid #ae480a; background: linear_gradient(#e4741f, #b6550f); border-radius: 2px; box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0px 3px 7px rgba(0, 0, 0, 0.7); background-color: #e4741f; padding: 10px 12px; margin-top: 6px; line-height: 14px; font-size: 14px; display: inline-block; text-align: center; }
-#header nav li a:hover { background: linear_gradient(#c54d18, #a3360d); background-color: #b6550f; border: 1px solid #a3360d; box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.2), 0px 1px 0px transparent; }
-a {color: #e4741f; font-weight: 400; text-decoration: none;}
-a:hover {color: #b6550f;}
-blockquote {border-left: 3px solid #e4741f;margin: 0;padding: 0 0 0 20px;font-style: italic;}
-figure { float:right; margin:6px; padding: 6px; text-align:center; background-color: #353535; }
+ @import "{{ site.theme }}";
 
-ol,
-ul {
-    padding: 0 0 0 1.33em;
-}
-
-.skip-link {
-  border: 0;
-  clip: rect(1px,1px,1px,1px);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  padding: 0;
-  position: absolute;
-  width: 1px;
-  word-wrap: normal !important
-}
-
-.skip-link:focus {
-  background-color: #f0e7d5;
-  border-radius: 2px;
-  box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3),0px 3px 7px rgba(0,0,0,0.7);
-  clip: auto !important;
-  color: #252525;
-  display: block;
-  font-size: 16px;
-  font-size: 1rem;
-  height: auto;
-  padding: 1em;
-  text-decoration: none;
-  width: auto;
-  z-index: 100000;
-}
-
-ul.multi-column-list {
-  column-count: auto;
-  column-width: 15em;
-
-  li {
-    break-inside: avoid-column;
-  }
-
-  ul {
-    column-count: 1;
-    break-before: avoid-column;
-  }
-}
-
-/* same formatting as jekyll-midnight, just applied to a different selector for a less confusing semantic structure */
+ /* same formatting as jekyll-midnight, just applied to a different selector for a less confusing semantic structure */
 
 #navigation-top {
-
   z-index: 100;
   left:0;
   top: 0px;
@@ -146,3 +86,157 @@ section #title .site-title {
   text-align: center;
   line-height: 36px;
 }
+
+/* continue custom overrides */
+
+.button-left {
+  float: left;
+  margin-left: 6px;
+}
+
+#navigation-top nav {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 10px;
+  background: blue;
+  margin: 6px auto;
+}
+
+#navigation-top ul {
+  margin: 0;
+}
+
+.wrapper {
+  max-width: 1080px;
+  margin: 0 auto;
+  position: relative;
+  padding: 0 20px;
+}
+
+section {
+  max-width: 1080px;
+  padding: 30px 0px 0 /*50px*/ 0px;
+  margin: 20px 0;
+  margin-top: 70px;
+}
+
+code {
+  font-family: 'Lucida Sans', Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
+  color: #efefef;
+  font-size: 13px;
+  margin: 0 0px;
+  padding: 0px 0px;
+  border-radius: 2px;
+}
+
+body {
+  padding: 0px 0 20px 0px;
+  margin: 0px;
+  font: 14px/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  color: #f0e7d5;
+  font-weight: normal;
+  background: #0f0f0f;
+  background-attachment: fixed !important;
+  background: linear_gradient(#2a2a29, #1c1c1c);
+}
+
+#navigation-top nav li a {
+  color: white;
+  border: 1px solid #ae480a;
+  background: linear_gradient(#e4741f, #b6550f);
+  border-radius: 2px;
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0px 3px 7px rgba(0, 0, 0, 0.7);
+  background-color: #e4741f;
+  padding: 10px 12px;
+  margin-top: 6px;
+  line-height: 14px;
+  font-size: 14px;
+  display: inline-block;
+  text-align: center;
+}
+
+#navigation-top nav li a:hover {
+  background: linear_gradient(#c54d18, #a3360d);
+  background-color: #b6550f;
+  border: 1px solid #a3360d;
+  box-shadow: inset 0px 1px 1px rgba(0, 0, 0, 0.2), 0px 1px 0px transparent;
+}
+
+a {
+  color: #e4741f;
+  font-weight: 400;
+  text-decoration: none;
+}
+
+a:focus {
+    outline: 2px dotted #fca366;
+}
+
+a:hover {
+  color: #b6550f;
+}
+
+blockquote {
+  border-left: 3px solid #e4741f;
+  margin: 0;
+  padding: 0 0 0 20px;
+  font-style: italic;
+}
+
+figure {
+  float: right;
+  margin: 6px;
+  padding: 6px;
+  text-align: center;
+  background-color: #353535;
+}
+
+ol,
+ul {
+    padding: 0 0 0 1.33em;
+}
+
+.skip-link {
+  border: 0;
+  clip: rect(1px,1px,1px,1px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important
+}
+
+.skip-link:focus {
+  background-color: #f0e7d5;
+  border-radius: 2px;
+  box-shadow: inset 0px 1px 0px rgba(255,255,255,0.3),0px 3px 7px rgba(0,0,0,0.7);
+  clip: auto !important;
+  color: #252525;
+  display: block;
+  font-size: 16px;
+  font-size: 1rem;
+  left: 1em;
+  height: auto;
+  padding: 1em;
+  text-decoration: none;
+  top: 1em;
+  width: auto;
+  z-index: 100000;
+}
+
+ul.multi-column-list {
+  column-count: auto;
+  column-width: 15em;
+
+  li {
+    break-inside: avoid-column;
+  }
+
+  ul {
+    column-count: 1;
+    break-before: avoid-column;
+  }
+}
+
