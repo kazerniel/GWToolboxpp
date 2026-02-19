@@ -1,10 +1,29 @@
 ---
 ---
 
- @import "{{ site.theme }}";
+@import "{{ site.theme }}";
 
- /* #region general */
- body {
+/* #region fonts */
+@font-face
+{
+	font-family: 'Open Sans';
+	src: url('../fonts/OpenSans-VariableFont_wdth,wght-Kombu.woff2') format('woff2');
+	font-style: normal;
+	font-display: swap;
+}
+
+@font-face
+{
+	font-family: 'Open Sans';
+	src: url('../fonts/OpenSans-Italic-VariableFont_wdth,wght-Kombu.woff2') format('woff2');
+	font-style: italic;
+	font-display: swap;
+}
+/* #endregion */
+
+/* #region general */
+body {
+  --font-stack: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-small: 0.875rem;
   --accent-bg-Lc95: #802901;     /* color(--okhsl 40 1   0.31801) */
   --accent-bg-Lc85: #a84002;     /* color(--okhsl 43 1   0.4308) */
@@ -17,8 +36,9 @@
   --accent-text-Lc90: #f7e6dc;   /* color(--okhsl 51 0.5 0.92372) */
   padding: 0px 0 20px 0px;
   margin: 0px;
-  font: 100%/1.5 "OpenSansRegular", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font: 100%/1.5 var(--font-stack);
   color: var(--accent-text-Lc90);
+  font-feature-settings: 'ss01', 'zero';
   font-weight: normal;
   background: #0f0f0f;
   background-attachment: fixed !important;
@@ -46,14 +66,26 @@ a:hover {
 }
 
 code {
-  font-family: 'Lucida Sans', Monaco, Bitstream Vera Sans Mono, Lucida Console, Terminal, monospace;
-  color: #efefef;
-  font-size: 13px;
-  margin: 0 0px;
-  padding: 0px 0px;
+  font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', Terminal, monospace;
+  background-color: rgba(255,255,255,0.285);
+  color: #fff;
+  font-size: var(--font-small);
+  margin: 0;
+  padding: 2px;
   border-radius: 2px;
 }
- /* #endregion */
+
+dt,
+th {
+  font-family: var(--font-stack) !important;
+  font-weight: 600;
+}
+
+strong {
+  font-family: var(--font-stack) !important;
+  font-weight: 700;
+}
+/* #endregion */
 
 /* #region skip link */
 .skip-link {
@@ -86,8 +118,9 @@ code {
 }
 /* #endregion */
 
- /* #region navigation-top */
- #navigation-top {
+/* #region navigation-top */
+
+#navigation-top {
   z-index: 100;
   left: 0;
   top: 0px;
@@ -99,18 +132,17 @@ code {
   box-shadow: 0px 1px 3px rgba(0,0,0,.25);
 
   nav {
-    max-width: 650px;
-    margin: 0 auto;
+    max-width: 1080px;
     padding: 0 10px;
-    background: blue;
     margin: 6px auto;
 
     ul {
+      margin: 0;
       padding: 0;
     }
 
     li {
-      font-family: 'OpenSansLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
+      font-family: var(--font-stack);
       font-weight: normal;
       list-style: none;
       display: inline;
@@ -158,36 +190,31 @@ code {
       }
     }
   }
+
+  .button-left {
+    float: left;
+    margin-left: 6px;
+  }
 }
 
-#navigation-top .button-left {
-  float: left;
-  margin-left: 6px;
-}
-
-#navigation-top nav {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 0 10px;
-  margin: 6px auto;
-}
-
-#navigation-top ul {
-  margin: 0;
-}
- /* #endregion */
+/* #endregion */
 
 /* #region header */
 /* same formatting as jekyll-midnight, just applied to a different selector for a more accessible semantic structure */
 
 header #title .site-title {
   display: block;
-  font-family: 'OpenSansLight', "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: var(--font-stack);
   font-weight: normal;
   font-size: 40px;
   margin: 0 0 10px;
   text-align: center;
   line-height: 36px;
+}
+
+header #title p {
+  font-family: var(--font-stack);
+  font-weight: normal;
 }
 
 /* custom overrides */
@@ -201,16 +228,24 @@ header section {
 
 header #title .credits {
   color: #787878; /* APCA contrast 30 */
+  font-family: var(--font-stack);
   font-size: var(--font-small);
 }
 /* #endregion */
 
 /* #region main content */
 
-main h1,
-main h2,
-main h3 {
-  line-height: 1.5;
+main {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    color: #fff;
+    font-family: var(--font-stack);
+    line-height: 1.5;
+  }
 }
 
 main h1 {
@@ -223,7 +258,6 @@ main h2 {
 
 main h3 {
   font-size: 1.25rem;
-  color: #e8e8e8;
 }
 
 main blockquote {
@@ -241,25 +275,35 @@ main figure {
   background-color: #353535;
 }
 
+p
+{
+  font-family: var(--font-stack);
+}
+
 /* #region lists */
-main dl,
-main ol,
-main ul {
+main {
+
+  dl,
+  ol,
+  ul {
     padding: 0 0 0 1.33em;
-}
+  }
 
-main li a
-{
-  line-height: calc(max(1.5, 24px));
-}
+  li {
+    margin-bottom: 3px;
 
-main li :is(dl, ol, ul) {
-  margin-bottom: 0;
-}
+    a {
+      line-height: calc(max(1.5, 24px));
+    }
 
-main ul li li
-{
-	list-style-image: url("../images/bullet-single.png");
+    :is(dl, ol, ul) {
+      margin-bottom: 0;
+    }
+  }
+
+  ul li li {
+    list-style-image: url("../images/bullet-single.png");
+  }
 }
 
 main ul.multi-column-list {
@@ -271,7 +315,6 @@ main ul.multi-column-list {
   }
 
   ul {
-    column-count: 1;
     break-before: avoid-column;
   }
 
