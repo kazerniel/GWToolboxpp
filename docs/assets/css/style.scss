@@ -67,11 +67,11 @@ a:hover {
 
 code {
   font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', Terminal, monospace;
-  background-color: rgba(255,255,255,0.285);
+  background-color: #ffd1b756; /* color(--okhsv 51.068 0.25 1 / 0.33725) APCA Lc15 to bg*/
   color: #fff;
   font-size: var(--font-small);
   margin: 0;
-  padding: 2px;
+  padding: 2px 3px;
   border-radius: 2px;
 }
 
