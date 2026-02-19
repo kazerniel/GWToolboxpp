@@ -50,7 +50,7 @@ There may be different reasons for this. Try the following, in no particular ord
 * Launch both Guild Wars and Toolbox as administrator.
 * Launch Toolbox while Guild Wars is running in windowed mode, not minimized or fullscreen.
 * Avoid using other programs that interact with Guild Wars (TexMod, uMod, MultiLaunch, screen recording software, game overlays such as steam, fraps, etc)
-* Add GWToolbox.exe and gw.exe to your antivirus whitelist. Although usually not needed, you may want to also add `GWToolbox.dll` to your whitelist. You can find it in the [settings folder](settings#storage) (`C:\Users\[Username]\Documents\GWToolboxpp`).
+* Add GWToolbox.exe and gw.exe to your antivirus whitelist. Although usually not needed, you may want to also add `GWToolbox.dll` to your whitelist. You can find it in the [settings folder](settings#storage) (`C:\Users\%USERNAME%\Documents\GWToolboxpp`).
 
 ### I run the launcher and I get the message “GWToolbox.dll was not loaded, unknown error” or "exit code 0"
 This error typically means that some security feature is preventing Toolbox to access Guild Wars. It might be caused by any of the following:
@@ -73,10 +73,10 @@ You can also bind multiple keys to the same action, again by creating extra hotk
 This is a bug that causes the Toolbox launcher to not download the icons. Delete your `GWToolbox.exe` and replace it with [this one](https://github.com/HasKha/GWToolboxpp/releases/download/2.0-launcher/GWToolbox.exe).
 
 ### Toolbox cannot load font upon launch. How do I get it to load the font?
-`Font.ttf` can be found in the GitHub repository in the resource folder. Download [this file](https://github.com/HasKha/GWToolboxpp/blob/master/resources/Font.ttf) and navigate to `C:\Users\[Username]\AppData\Local\GWToolboxpp` and copy it to that folder.
+`Font.ttf` can be found in the GitHub repository in the resource folder. Download [this file](https://github.com/HasKha/GWToolboxpp/blob/master/resources/Font.ttf) and navigate to `C:\Users\%USERNAME%\AppData\Local\GWToolboxpp` and copy it to that folder.
 
 ### I am missing icons in my Completion window. Help?
-Missing icons are most likely not downloaded into your `C:\Users\%USERNAME%\Documents\GWToolboxpp\%COMPUTERNAME%\img` folder. All of the icons can be found in the [resources folder](https://github.com/HasKha/GWToolboxpp/tree/master/resources) in the GitHub repository where you can download them. By navigating to a single file, you will in most cases find a download button to download the individual file. If you are missing a lot of icons, you can download the repository from the [main page](https://github.com/HasKha/GWToolboxpp). Click *Code* and Download *Zip*. From the .zip-file, navigate to `GWToolboxpp-master.zip\GWToolboxpp-master\resources\` and drop the needed icon folder into `C:\Users\[Username]\AppData\Local\GWToolboxpp\img`.
+Missing icons are most likely not downloaded into your `C:\Users\%USERNAME%\Documents\GWToolboxpp\%COMPUTERNAME%\img` folder. All of the icons can be found in the [resources folder](https://github.com/HasKha/GWToolboxpp/tree/master/resources) in the GitHub repository where you can download them. By navigating to a single file, you will in most cases find a download button to download the individual file. If you are missing a lot of icons, you can download the repository from the [main page](https://github.com/HasKha/GWToolboxpp). Click *Code* and Download *Zip*. From the .zip-file, navigate to `GWToolboxpp-master.zip\GWToolboxpp-master\resources\` and drop the needed icon folder into `C:\Users\%USERNAME%\AppData\Local\GWToolboxpp\img`.
 
 ### Why isn't Toolbox remembering my settings when I restart! Help?
 Toolbox settings are saved to the files in the [settings folder](settings#storage) when you close Toolbox or click "Save Now" at the bottom of the [Settings window](settings). Settings are loaded from those files when you launch Toolbox or click "Load Now".
@@ -99,4 +99,4 @@ The urgoz timer shows "Open" or "Closed", along with the time remaining, **under
 * You have your timer on the bottom of the screen, the urgoz timer is off-screen. Move the timer up vertically. 
 * Your timer window is too small, the urgoz timer is not being shown. Go in settings, tick "Unlock Move All" and increase the size of the timer window. 
 
-[back](./)
+[back](index)
