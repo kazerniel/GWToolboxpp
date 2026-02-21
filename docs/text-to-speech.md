@@ -192,4 +192,4 @@ This helps you monitor what's being processed and troubleshoot any issues.
 - Custom voice assignments only work with providers that support voice selection
 - Speech bubbles from skills and combat quotes may be frequent in explorable areas
 
-[back](./)
+[🡠 back](index)

@@ -99,4 +99,4 @@ The urgoz timer shows "Open" or "Closed", along with the time remaining, **under
 * You have your timer on the bottom of the screen, the urgoz timer is off-screen. Move the timer up vertically. 
 * Your timer window is too small, the urgoz timer is not being shown. Go in settings, tick "Unlock Move All" and increase the size of the timer window. 
 
-[back](index)
+[🡠 back](index)

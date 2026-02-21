@@ -20,4 +20,4 @@ layout: default
 
 **and everyone working/suggesting ideas!**
 
-[back](./)
+[🡠 back](index)
