@@ -351,4 +351,46 @@ main ul.multi-column-list {
   text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
 }
 /* #endregion */
+
+/* #region collapsible sections */
+
+main details {
+  background-color: rgb(255 209 183 / 0.07); /* color(--okhsv 51.068 0.25 1 / 0.33725) APCA Lc15 to bg*/
+  border-radius: 4px;
+  margin: 30px 0;
+  padding: 1rem 1.5rem;
+
+  > :last-child {
+    margin-bottom: 0.5rem;
+  }
+
+  summary {
+    display: list-item;
+
+    &::marker {
+      font-size: 1.5rem;
+      color: rgb(from var(--accent-text-Lc90) r g b / 0.45)
+    }
+
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      display: inline;
+      line-height: 1;
+      margin-bottom: 0;
+    }
+  }
+
+  &[open] summary
+  {
+    margin-bottom: 20px;
+  }
+
+  ul.multi-column-list > li > ul {
+    margin-bottom: 10px;
+  }
+}
+/* #endregion */
 /* #endregion */
