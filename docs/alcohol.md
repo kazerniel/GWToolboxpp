@@ -4,7 +4,9 @@ layout: default
 
 # Alcohol
 
-The alcohol monitor helps you track your character’s remaining duration of drunkenness. It is only visible in explorable areas.
+The alcohol monitor helps you keep track of your character’s remaining duration of [drunkenness](https://wiki.guildwars.com/wiki/Drunk), which is needed for [certain skills](https://wiki.guildwars.com/wiki/Drunk#Skills_affected_by_intoxication) and builds.
+
+This widget is only visible in explorable areas.
 
 {% include settings_intro.html %}
 
