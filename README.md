@@ -7,7 +7,7 @@ I'm trying to include as many accessibility best practices as practical. Zero AI
 ## Feature & settings tracker
 
 | done?              | feature / page          |
-|--------------------|-------------------------|
+|:------------------:|-------------------------|
 | ✅                  | Active Quest Info       |
 | ✅                  | Alcohol                 |
 |                    | Armory                  |
