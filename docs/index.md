@@ -34,6 +34,7 @@ GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancemen
       <li><a href="chat_settings">Chat Settings</a></li>
     </ul>
   </li>
+  <li><a href="hotkeys"><strong>Hotkeys</strong></a></li>
   <li><strong>Input features</strong>
     <ul>
       <li><a href="gamepad_module">Gamepad Module</a></li>
@@ -55,7 +56,6 @@ GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancemen
       <li><a href="vanquish">Vanquish Monitor</a></li>
     </ul>
   </li>
-  <li><a href="hotkeys"><strong>Hotkeys</strong></a></li>
   <li><strong>Item features</strong>
     <ul>
       <li><a href="drop_tracker">Drop Tracker</a></li>
