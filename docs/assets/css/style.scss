@@ -38,7 +38,7 @@ body {
   margin: 0px;
   font: 100%/1.5 var(--font-stack);
   color: var(--accent-text-Lc90);
-  font-feature-settings: 'ss01', 'zero';
+  font-feature-settings: 'ss01'/*, 'zero'*/;
   font-weight: normal;
   background: #0f0f0f;
   background-attachment: fixed !important;
@@ -67,7 +67,7 @@ a:hover {
 
 code {
   font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', Terminal, monospace;
-  background-color: #ffd1b756; /* color(--okhsv 51.068 0.25 1 / 0.33725) APCA Lc15 to bg*/
+  background-color: rgb(255 209 183 / 0.33725); /* color(--okhsv 51.068 0.25 1 / 0.33725) APCA Lc15 to bg*/
   color: #fff;
   font-size: var(--font-small);
   margin: 0;
@@ -200,12 +200,11 @@ strong {
 /* #endregion */
 
 /* #region header */
-/* same formatting as jekyll-midnight, just applied to a different selector for a more accessible semantic structure */
 
 header #title .site-title {
   display: block;
   font-family: var(--font-stack);
-  font-weight: normal;
+  font-weight: 300;
   font-size: 40px;
   margin: 0 0 10px;
   text-align: center;
@@ -236,6 +235,7 @@ header #title .credits {
 /* #region main content */
 
 main {
+
   h1,
   h2,
   h3,
@@ -245,40 +245,59 @@ main {
     color: #fff;
     font-family: var(--font-stack);
     line-height: 1.5;
+    margin: 1em 0 0.5em;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--accent-bg-Lc75);
+    margin: 0;
+    padding: 0 0 0 20px;
+    font-style: italic;
+  }
+
+  figure {
+    float: right;
+    margin: 6px;
+    padding: 6px;
+    text-align: center;
+    background-color: #353535;
+  }
+
+  p {
+    font-family: var(--font-stack);
   }
 }
 
-main h1 {
-  font-size: 1.75rem;
-}
-
-main h2 {
-  font-size: 1.5rem;
-}
-
-main h3 {
-  font-size: 1.25rem;
-}
-
-main blockquote {
-  border-left: 3px solid #e4741f;
-  margin: 0;
-  padding: 0 0 0 20px;
-  font-style: italic;
-}
-
-main figure {
+/* #region images */
+main img.float {
   float: right;
-  margin: 6px;
-  padding: 6px;
-  text-align: center;
-  background-color: #353535;
+  margin: 0 0 20px 40px;
+  max-width: calc(50% - 40px);
 }
 
-p
-{
-  font-family: var(--font-stack);
+@media screen and (width < 800px) {
+
+  main img.float {
+    display: block;
+    float: none;
+    margin: 0 auto;
+    max-width: 100%;
+  }
 }
+/* #endregion */
+
 
 /* #region lists */
 main {
@@ -299,6 +318,10 @@ main {
     :is(dl, ol, ul) {
       margin-bottom: 0;
     }
+
+    p {
+      margin-bottom: 10px;
+    }
   }
 
   ul li li {
@@ -308,7 +331,8 @@ main {
 
 main ul.multi-column-list {
   column-count: auto;
-  column-width: 15em;
+  column-gap: 40px;
+  column-width: 14em;
 
   li {
     break-inside: avoid-column;
@@ -321,32 +345,39 @@ main ul.multi-column-list {
   > li > ul {
     margin-bottom: 20px;
   }
+
+  &.wide
+  {
+    column-count: 2;
+    column-gap: 40px;
+    column-width: 350px;
+  }
 }
 /* #endregion */
 
 /* #region settings chips */
-.chip {
-	border-radius: 2px;
-	box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0px 1px 2px rgba(0, 0, 0, 0.7);
-	display: inline-block;
-	font-size: 14px;
-	font-weight: bold;
-	margin-right: 0.2em;
-	padding: 0 0.25em;
-	text-align: center;
-	text-shadow: 0px 1px 0px rgba(0,0,0,.2);
-	min-width: 1.8rem;
+main .chip {
+  border-radius: 2px;
+  box-shadow: inset 0px 1px 0px rgba(255, 255, 255, 0.3), 0px 1px 2px rgba(0, 0, 0, 0.7);
+  display: inline-block;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 0 2px 0 4px;
+  padding: 0 0.25em;
+  text-align: center;
+  text-shadow: 0px 1px 0px rgba(0, 0, 0, .2);
+  min-width: 1.8rem;
+
+  &.off {
+    background-color: var(--accent-bg-Lc75-no);
+  }
+
+  &.on {
+    background-color: var(--accent-bg-Lc75-yes);
+  }
 }
 
-.chip.off {
-	background-color: var(--accent-bg-Lc75-no);
-}
-
-.chip.on {
-	background-color: var(--accent-bg-Lc75-yes);
-}
-
-.sample-dot
+main .sample-dot
 {
   text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
 }
