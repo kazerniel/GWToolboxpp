@@ -8,6 +8,8 @@ The alcohol monitor helps you keep track of your character’s remaining duratio
 
 This widget is only visible in explorable areas.
 
+## Settings
+
 {% include settings_intro.html %}
 
 {% include off.html %} **Only show when drunk**: Hides widget when not using alcohol
