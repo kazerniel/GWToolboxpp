@@ -65,15 +65,34 @@ a:hover {
   color: var(--accent-text-Lc45);
 }
 
+/* #region preformatted code */
+pre,
 code {
   font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', Terminal, monospace;
   background-color: rgb(255 209 183 / 0.33725); /* color(--okhsv 51.068 0.25 1 / 0.33725) APCA Lc15 to bg*/
   color: #fff;
   font-size: var(--font-small);
-  margin: 0;
-  padding: 2px 3px;
   border-radius: 2px;
 }
+
+pre {
+  border: 0 none;
+  box-shadow: none;
+  margin: 1em 0;
+  padding: 1em 2em 1em 1em;
+  width: fit-content;
+
+  code {
+    background-color: transparent;
+    text-shadow: none;
+  }
+}
+
+code {
+  margin: 0;
+  padding: 3px 5px;
+}
+/* #endregion */
 
 dt,
 th {
@@ -234,6 +253,7 @@ header #title .credits {
 
 /* #region main content */
 
+/* #region headings */
 main {
 
   h1,
@@ -249,17 +269,24 @@ main {
   }
 
   h1 {
-    font-size: 1.75rem;
+    font-size: 1.8rem;
   }
 
   h2 {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
   h3 {
-    font-size: 1.25rem;
+    font-size: 1.4rem;
   }
 
+  h4 {
+    font-size: 1.2rem;
+  }
+}
+/* #endregion */
+
+main {
   blockquote {
     border-left: 3px solid var(--accent-bg-Lc75);
     margin: 0;
@@ -309,7 +336,7 @@ main {
   }
 
   li {
-    margin-bottom: 3px;
+    margin-bottom: 1em;
 
     a {
       line-height: calc(max(1.5, 24px));
@@ -329,6 +356,10 @@ main {
   }
 }
 
+main ol li::marker {
+  color: rgba(from var(--accent-text-Lc90) r g b / 0.745);
+}
+
 main ul.multi-column-list {
   column-count: auto;
   column-gap: 40px;
@@ -336,6 +367,7 @@ main ul.multi-column-list {
 
   li {
     break-inside: avoid-column;
+    margin-bottom: 3px;
   }
 
   ul {
