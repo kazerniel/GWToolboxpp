@@ -10,7 +10,7 @@ I'm trying to include as many accessibility best practices as practical. Zero AI
 |:------------------:|-------------------------|
 | ✅ | Active Quest Info |
 | ✅ | Alcohol |
-|  | Armory |
+| ✅ | Armory |
 |  | Audio Settings |
 |  | Bonds |
 |  | Builds |
