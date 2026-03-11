@@ -10,7 +10,7 @@ If no character is currently logged in in the client, the selector shows the nam
 
 ## Settings
 
-- [ ] Never check for an update
-    - (default: OFF)
-- [x] Always start as admin
-    - (default: ON)
+- {% include off.html %} Never check for an update
+- {% include on.html %} Always start as admin
+
+[🡠 back](index)
