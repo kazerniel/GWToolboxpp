@@ -29,6 +29,7 @@ I'm trying to include as many accessibility best practices as practical. Zero AI
 |  | Duping |
 |  | Effect Durations |
 |  | Enemy Window |
+|  | Exploitable Corpses |
 |  | Faction Leaderboard |
 | ✅ | FPS Fix |
 |  | Friend List |

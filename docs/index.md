@@ -49,6 +49,7 @@ GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancemen
       <li><a href="duping">Duping</a></li>
       <li><a href="effect_durations">Effect Durations</a></li>
       <li><a href="enemy_window">Enemy Window</a></li>
+      <li><a href="exploitable_corpses">Exploitable Corpses</a></li>
       <li><a href="objectives">Objectives</a></li>
       <li><a href="pcons">Pcons</a></li>
       <li><a href="resign_log">Resign Log</a></li>

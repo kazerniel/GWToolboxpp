@@ -152,6 +152,7 @@ Buttons for saving and loading your Toolbox settings to and from the settings fo
       <li><a href="damage">Damage</a></li>
       <li><a href="distance">Distance</a></li>
       <li><a href="effect_durations">Effect Durations</a></li>
+      <li><a href="exploitable_corpses">Exploitable Corpses</a></li>
       <li><a href="friend_list">Friend List</a></li>
       <li><a href="health">Health</a></li>
       <li><a href="latency">Latency</a></li>
