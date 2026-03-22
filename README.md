@@ -11,7 +11,7 @@ I'm trying to include as many accessibility best practices as practical. Zero AI
 | ✅ | Active Quest Info |
 | ✅ | Alcohol |
 | ✅ | Armory |
-|  | Audio Settings |
+| ⚠️<br/>[needs input](https://github.com/gwdevhub/GWToolboxpp/issues/1767) | Audio Settings |
 |  | Bonds |
 |  | Builds |
 |  | Camera Unlock |
@@ -85,7 +85,7 @@ I'm trying to include as many accessibility best practices as practical. Zero AI
 |  | Third Party Integration |
 |  | Timer |
 |  | Title Tracker |
-|  | Toolbox Launcher |
+| ✅ | Toolbox Launcher |
 |  | Toolbox Settings |
 |  | Trade |
 |  | Travel |
