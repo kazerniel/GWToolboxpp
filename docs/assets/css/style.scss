@@ -21,19 +21,26 @@
 }
 /* #endregion */
 
+/*  Colours
+    OKHSV and OKHSL were calculated via: https://facelessuser.github.io/coloraide/examples/colorpicker.html
+    Lc values refer to APCA contrast, and were calculated via: https://harmonizer.evilmartians.com/
+*/
+
 /* #region general */
 body {
   --font-stack: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   --font-small: 0.875rem;
-  --accent-bg-Lc95: #802901;     /* color(--okhsl 40 1   0.31801) */
-  --accent-bg-Lc85: #a84002;     /* color(--okhsl 43 1   0.4308) */
-  --accent-bg-Lc75: #c15c01;     /* color(--okhsl 51 1   0.52252) */
-  --accent-bg-Lc75-yes: #a46f02; /* color(--okhsl 54 1 0.64223) */
-  --accent-bg-Lc75-no: #c65738;  /* color(--okhsl 40 1 0.64651) */
-  --accent-text-Lc45: #fb6406;   /* color(--okhsl 43 1   0.6532) */
-  --accent-text-Lc60: #ff9755;   /* color(--okhsl 51 1   0.75206) */
-  --accent-text-Lc75: #ffbe93;   /* color(--okhsl 54 1   0.84205) */
-  --accent-text-Lc90: #f7e6dc;   /* color(--okhsl 51 0.5 0.92372) */
+  /* original accent: #e4741f = color(--okhsl 51.351 0.92189 0.62469) */
+  --accent-bg-Lc95: #802901;             /* color(--okhsl 40 1    0.31801) */
+  --accent-bg-Lc85: #a84002;             /* color(--okhsl 43 1    0.4308) */
+  --accent-bg-Lc75: #c15c01;             /* color(--okhsl 51 1    0.52252) */
+  --accent-bg-Lc75-yes: #a46f02;         /* color(--okhsl 54 1    0.64223) */
+  --accent-bg-Lc75-no: #c65738;          /* color(--okhsl 40 1    0.64651) */
+  --accent-bg-oks25-okv1-rgb: 255 209 183; /* color(--okhsv 51 0.25 1) */
+  --accent-text-Lc45: #fb6406;           /* color(--okhsl 43 1    0.6532) */
+  --accent-text-Lc60: #ff9755;           /* color(--okhsl 51 1    0.75206) */
+  --accent-text-Lc75: #ffbe93;           /* color(--okhsl 54 1    0.84205) */
+  --accent-text-Lc90: #f7e6dc;           /* color(--okhsl 51 0.5  0.92372) */
   --accent-warning: var(--accent-bg-Lc75-no);
   padding: 0px 0 20px 0px;
   margin: 0px;
@@ -70,7 +77,7 @@ a:hover {
 pre,
 code {
   font-family: Monaco, 'Bitstream Vera Sans Mono', 'Lucida Console', Terminal, monospace;
-  background-color: rgb(255 209 183 / 0.33725); /* color(--okhsv 51.068 0.25 1 / 0.33725) APCA Lc15 to bg*/
+  background-color: rgb(var(--accent-bg-oks25-okv1-rgb) / 0.33725); /* APCA Lc15 to bg */
   color: #fff;
   font-size: var(--font-small);
   border-radius: 2px;
@@ -91,7 +98,7 @@ pre {
 
 code {
   margin: 0;
-  padding: 3px 5px;
+  padding: 4px 5px 3px;
 }
 /* #endregion */
 
@@ -321,6 +328,48 @@ main .callout {
 }
 /* #endregion */
 
+/* #region collapsible sections */
+
+main details {
+  background-color: rgb(var(--accent-bg-oks25-okv1-rgb) / 0.07);
+  border-radius: 4px;
+  margin: 30px 0;
+  padding: 15px 25px;
+
+  > :last-child {
+    margin-bottom: 10px;
+  }
+
+  summary {
+    display: list-item;
+
+    &::marker {
+      font-size: 1.5rem;
+      color: rgb(from var(--accent-text-Lc90) r g b / 0.45)
+    }
+
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      display: inline;
+      line-height: 1;
+      margin-bottom: 0;
+    }
+  }
+
+  &[open] summary
+  {
+    margin-bottom: 20px;
+  }
+
+  ul.multi-column-list > li > ul {
+    margin-bottom: 10px;
+  }
+}
+/* #endregion */
+
 /* #region images */
 main img.float {
   float: right;
@@ -356,7 +405,8 @@ main {
       line-height: calc(max(1.5, 24px));
     }
 
-    :is(dl, ol, ul) {
+    :is(dl, ol, ul),
+    li:not(:last-child) {
       margin-bottom: 0;
     }
 
@@ -412,7 +462,7 @@ main .chip {
   padding: 0 0.25em;
   text-align: center;
   text-shadow: 0px 1px 0px rgba(0, 0, 0, .2);
-  min-width: 1.8rem;
+  min-width: 1.8em;
 
   &.off {
     background-color: var(--accent-bg-Lc75-no);
@@ -429,45 +479,5 @@ main .sample-dot
 }
 /* #endregion */
 
-/* #region collapsible sections */
 
-main details {
-  background-color: rgb(255 209 183 / 0.07); /* color(--okhsv 51.068 0.25 1 / 0.33725) APCA Lc15 to bg*/
-  border-radius: 4px;
-  margin: 30px 0;
-  padding: 1rem 1.5rem;
-
-  > :last-child {
-    margin-bottom: 0.5rem;
-  }
-
-  summary {
-    display: list-item;
-
-    &::marker {
-      font-size: 1.5rem;
-      color: rgb(from var(--accent-text-Lc90) r g b / 0.45)
-    }
-
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-      display: inline;
-      line-height: 1;
-      margin-bottom: 0;
-    }
-  }
-
-  &[open] summary
-  {
-    margin-bottom: 20px;
-  }
-
-  ul.multi-column-list > li > ul {
-    margin-bottom: 10px;
-  }
-}
-/* #endregion */
 /* #endregion */

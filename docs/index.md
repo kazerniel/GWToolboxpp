@@ -100,7 +100,7 @@ GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancemen
       <li><a href="title_tracker">Title Tracker</a></li>
     </ul>
   </li>
-  <li><strong><a href="game_settings">Quality of Life features</a></strong></li>
+  <li><strong><a href="game_settings"><strong>Quality of Life features</strong></a></strong></li>
   <li><strong>Quest features</strong>
     <ul>
       <li><a href="active_quest_info">Active Quest Info</a></li>
