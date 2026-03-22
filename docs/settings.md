@@ -1,8 +1,7 @@
 ---
 layout: default
+title: Settings
 ---
-
-# Settings
 The Settings window contains configuration options for all Toolbox features, and provides access to several features that don't have their own [window](windows).
 
 {% include settings_intro.html %}

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <title>{{ site.title | default: site.github.repository_name }}</title>
+  <title>{% if page.title %}{{ page.title | append: ' | ' | append: site.title | default: site.github.repository_name }}{% else %}{{ site.title | default: site.github.repository_name }}{% endif %}</title>
   <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
   <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
@@ -57,6 +57,7 @@
   </header>
 
   <main class="wrapper" id="content" tabindex="-1">
+  <h1>{{ page.title }}</h1>
     {{ content }}
   </main>
 

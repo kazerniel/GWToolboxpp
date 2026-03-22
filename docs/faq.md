@@ -1,8 +1,7 @@
 ---
 layout: default
+title: Frequently Asked Questions
 ---
-
-# Frequently Asked Questions
 
 ## General
 ### Will I get banned for using GWToolbox++?

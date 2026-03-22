@@ -1,8 +1,7 @@
 ---
 layout: default
+title: Active Quest Info
 ---
-
-# Active Quest Info
 
 Shows the title and steps of the currently active quest.
 

@@ -1,8 +1,7 @@
 ---
 layout: default
+title: Credits
 ---
-
-# Credits
 **Sai Itecka**
 * Original creator of a damage monitor, which inspired the toolbox damage monitor.
 * Created original implementation of the Cursor Fix.

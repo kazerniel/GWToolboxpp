@@ -1,8 +1,7 @@
 ---
 layout: default
+title: Toolbox Launcher
 ---
-
-# Toolbox Launcher
 
 It pops up when you launch Toolbox, and lets you select which running Guild Wars client you want Toolbox to work with.
 

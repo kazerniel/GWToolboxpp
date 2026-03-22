@@ -1,8 +1,7 @@
 ---
 layout: default
+title: Armory
 ---
-
-# Armory
 
 The Armory is a powerful feature that allows you to preview all armor pieces, weapons and costumes in the game in all colors on your character. This tool is useful for planning your character's appearance or simply exploring the vast array of appearance options available in Guild Wars.
 

@@ -1,8 +1,7 @@
 ---
 layout: default
+title: Help
 ---
-
-# Help
 
 This section of the Settings menu contains some information about how to use Toolbox, along with a list of some of the more important chat commands. All of this information can be found, often in more detail, on this website.
 

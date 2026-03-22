@@ -3,6 +3,7 @@ layout: default
 ---
 
 # What is GWToolbox++?
+
 GWToolbox++ (or just *toolbox*), is a collection of several tools and enhancements for the original Guild Wars. It adds features that should exist in a modern game and tools to visualize information and improve the player experience.
 
 ## List of Features
