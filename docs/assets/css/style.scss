@@ -34,6 +34,7 @@ body {
   --accent-text-Lc60: #ff9755;   /* color(--okhsl 51 1   0.75206) */
   --accent-text-Lc75: #ffbe93;   /* color(--okhsl 54 1   0.84205) */
   --accent-text-Lc90: #f7e6dc;   /* color(--okhsl 51 0.5 0.92372) */
+  --accent-warning: var(--accent-bg-Lc75-no);
   padding: 0px 0 20px 0px;
   margin: 0px;
   font: 100%/1.5 var(--font-stack);
@@ -306,6 +307,19 @@ main {
     font-family: var(--font-stack);
   }
 }
+
+/* #region callouts */
+main .callout {
+  border-radius: 4px;
+  margin: 30px 0;
+  padding: 15px 25px;
+
+  &.warning {
+  border: 1px solid var(--accent-warning);
+  border-left-width: 5px;
+  }
+}
+/* #endregion */
 
 /* #region images */
 main img.float {
