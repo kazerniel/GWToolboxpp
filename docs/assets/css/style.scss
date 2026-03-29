@@ -23,6 +23,7 @@
 
 /*  Colours
     OKHSV and OKHSL were calculated via: https://facelessuser.github.io/coloraide/examples/colorpicker.html
+
     Lc values refer to APCA contrast, and were calculated via: https://harmonizer.evilmartians.com/
 */
 
@@ -42,6 +43,7 @@ body {
   --accent-text-Lc75: #ffbe93;           /* color(--okhsl 54 1    0.84205) */
   --accent-text-Lc90: #f7e6dc;           /* color(--okhsl 51 0.5  0.92372) */
   --accent-warning: var(--accent-bg-Lc75-no);
+  --grey-border-Lc15: #535353;
   padding: 0px 0 20px 0px;
   margin: 0px;
   font: 100%/1.5 var(--font-stack);
@@ -472,12 +474,33 @@ main .chip {
     background-color: var(--accent-bg-Lc75-yes);
   }
 }
-
-main .sample-dot
-{
-  text-shadow: 1px 0px 0px #fff, -1px 0px 0px #fff, 0px -1px 0px #fff, 0px 1px 0px #fff;
-}
 /* #endregion */
 
+/* #region color swatches */
 
+/*
+  Adapted from: https://codepen.io/tigt/pen/QWBEWpo
+
+   Which was linked from: https://dev.to/tigt/marking-up-colors-revisited-with-githubs-color-swatches-42eo
+*/
+
+main .color-swatch
+{
+  display: inline-block;
+  line-height: 1;
+  margin-left: 4px;
+  vertical-align: middle;
+  border-radius: 3px;
+  border: 1px solid var(--grey-border-Lc15);
+
+  width: 1em;
+  height: 1em;
+
+  background:
+    linear-gradient(currentColor, currentColor),
+    repeating-conic-gradient(#ccc 0% 25%, #808080 0% 50%) 50% / 100% 100%;
+  background-origin: border-box;
+  background-repeat: no-repeat;
+}
+/* #endregion */
 /* #endregion */
