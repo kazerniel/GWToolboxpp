@@ -7,9 +7,9 @@ The Armory is a powerful feature that allows you to preview all armor pieces, we
 
 ## Notes
 
-- The Armory only changes the appearance of your character in your Guild Wars client. Other players will still see your actual equipped armor.
-- Some special armors or costumes may not be available for preview.
-- There is currently no way to keep the applied armor appearance permanently. However, you can automatically reapply it every time you zone by using the Hotkeys module. See the [Tips](#tips) section below.
+* The Armory only changes the appearance of your character in your Guild Wars client. Other players will still see your actual equipped armor.
+* Some special armors or costumes may not be available for preview.
+* There is currently no way to keep the applied armor appearance permanently. However, you can automatically reapply it every time you zone by using the Hotkeys module. See the [Tips](#tips) section below.
 
 ## Settings
 
