@@ -12,7 +12,7 @@ I'm trying to include as many accessibility best practices as practical. Zero AI
 | ✅ | Alcohol |
 | ✅ | Armory |
 | ⚠️<br/>[needs input](https://github.com/gwdevhub/GWToolboxpp/issues/1767) | Audio Settings |
-|  | Bonds |
+| ✅ | Bonds |
 |  | Builds |
 |  | Camera Unlock |
 |  | Chat Commands |
